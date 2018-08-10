@@ -69,7 +69,7 @@
     <!-- DAO接口所在包名，Spring会自动查找其下的类，注册成MapperFactoryBean,
     不需要为每个Mapper单独写一个bean，但注意mapperInterface名字要和xml文件名一致-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.citi.portfoliomanager.dao.mapper"/>
+        <property name="basePackage" value="com.citi.portfoliomanager.dao"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
 
