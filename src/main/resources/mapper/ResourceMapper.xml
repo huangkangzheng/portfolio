@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citi.portfoliomanager.dao.mapper.ResourceMapper">
+    <resultMap id="resultResource" type="com.citi.portfoliomanager.entity.TResource">
+        <id column="res_id" property="id"/>
+        <result column="res_name" property="name"/>
+        <result column="res_attribute" property="attribute"/>
+        <result column="res_url" property="url"/>
+    </resultMap>
+    <select id="getResourceList" parameterType="long" resultMap="resultResource">
+        SELECT s.res_id,s.res_name,s.res_url,s.res_attribute FROM ws_Resource s LEFT JOIN ws_Resource_Role r on s.res_id = r.res_id where r.role_id = #{0}
+    </select>
+
+    <select id="getAllResources" resultMap="resultResource">
+         SELECT *
+         FROM ws_Resource
+    </select>
+</mapper>

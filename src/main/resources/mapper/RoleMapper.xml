@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citi.portfoliomanager.dao.mapper.RoleMapper">
+
+    <resultMap id="simpleRole" type="com.citi.portfoliomanager.entity.TRole">
+        <id column="role_id" property="id"/>
+        <result column="role_name" property="name"/>
+        <result column="role_code" property="code"/>
+    </resultMap>
+
+    <select id="get" parameterType="long" resultMap="simpleRole">
+        SELECT role_id,role_name,role_code
+              FROM ws_Role
+              WHERE role_id=#{0}
+    </select>
+
+</mapper>
