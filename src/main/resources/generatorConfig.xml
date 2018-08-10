@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <classPathEntry
+        location="C:\Users\acer\.m2\repository\mysql\mysql-connector-java\5.1.29\mysql-connector-java-5.1.29.jar" />
+    <context id="context1" targetRuntime="MyBatis3">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+            connectionURL="jdbc:mysql://139.199.78.74:3306/portfolio?useUnicode=true&amp;characterEncoding=UTF-8"
+            userId="user" password="123" />
+        <javaModelGenerator targetPackage="com.citi.portfoliomanager.entity"
+            targetProject="C:\Users\acer\git\portfolio\src\main\java" />
+        <sqlMapGenerator targetPackage="com.citi.portfoliomanager.dao"
+            targetProject="C:\Users\acer\git\portfolio\src\main\java" />
+        <javaClientGenerator targetPackage="com.citi.portfoliomanager.dao"
+            targetProject="C:\Users\acer\git\portfolio\src\main\java" type="XMLMAPPER" />
+        <table schema="CL_DEMO" tableName="pm_user" domainObjectName="User" />
+        <table schema="CL_DEMO" tableName="pm_portfolio" domainObjectName="Portfolio"  />
+        <table schema="CL_DEMO" tableName="pm_product_history" domainObjectName="ProductHistory"/>
+        <table schema="CL_DEMO" tableName="pm_position" domainObjectName="Position"/>
+        <table schema="CL_DEMO" tableName="pm_position_log" domainObjectName="PositionLog"/>
+        <table schema="CL_DEMO" tableName="pm_portfolio_history" domainObjectName="PortfolioHistory"/>
+    </context>
+</generatorConfiguration>
