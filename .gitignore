@@ -4,3 +4,5 @@ portfoliomanager.iml
 portfolio-log/
 target/
 .project
+.classpath
+.settings/
