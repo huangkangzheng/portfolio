@@ -6,24 +6,23 @@ import java.io.Serializable;
  * Created by hkz on 2017/4/23.
  * 父类
  */
-public class Person implements Serializable{
+public class User implements Serializable{
 
     private Long id;
     private String username; //用户名
     private String password;  //密码
     private String realName; //真实称呼
     private String userType;//管理员还是普通用户，仅仅用作页面跳转
-    private TRole role; //角色
 
-    public Person() {
+    public User() {
     }
 
-    public Person(String username, String password) {
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public Person(Long applierId) {
+    public User(Long applierId) {
         id = applierId;
     }
 
@@ -65,14 +64,6 @@ public class Person implements Serializable{
 
     public void setUserType(String userType) {
         this.userType = userType;
-    }
-
-    public TRole getRole() {
-        return role;
-    }
-
-    public void setRole(TRole role) {
-        this.role = role;
     }
 
 }

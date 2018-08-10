@@ -1,7 +1,7 @@
 package com.citi.portfoliomanager.dao;
 
 import com.citi.portfoliomanager.dao.mapper.UserMapper;
-import com.citi.portfoliomanager.entity.Person;
+import com.citi.portfoliomanager.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,14 +14,7 @@ public class UserDao {
     @Autowired
     private UserMapper userMapper;
 
-    public Person get(String username){
+    public User get(String username){
         return userMapper.get(username);
-    }
-    public Person get(long userId){
-        return userMapper.getById(userId);
-    }
-
-    public boolean setUser(Person user){
-        return userMapper.setUser(user);
     }
 }

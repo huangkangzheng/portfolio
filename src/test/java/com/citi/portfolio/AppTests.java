@@ -1,4 +1,4 @@
-package cn.edu.xmu.beike.yingxin;
+package com.citi.portfolio;
 
 import org.junit.Before;
 import org.junit.Test;

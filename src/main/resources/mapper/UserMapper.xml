@@ -2,41 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.citi.portfoliomanager.dao.mapper.UserMapper">
 
-    <resultMap id="resultPerson" type="com.citi.portfoliomanager.entity.Person">
+    <resultMap id="resultPerson" type="com.citi.portfoliomanager.entity.User">
         <id column="user_id" property="id"/>
         <result column="user_name" property="username"/>
         <result column="user_password" property="password"/>
         <result column="user_real_name" property="realName"/>
         <result column="user_type" property="userType"/>
-        <association property="role" select="cn.edu.xmu.beike.yingxin.dao.mapper.RoleMapper.get" column="role_id"/>
     </resultMap>
 
-    <resultMap id="simplePerson" type="com.citi.portfoliomanager.entity.Person">
+<!--    <resultMap id="simplePerson" type="com.citi.portfoliomanager.entity.User">
         <id column="user_id" property="id"/>
         <result column="user_name" property="username"/>
         <result column="user_real_name" property="realName"/>
-    </resultMap>
-
-    <insert id="setUser">
-        INSERT INTO
-        ws_User(user_name,user_real_name,user_password)
-        VALUES(#{user.username},#{user.realName},#{user.password})
-        ON DUPLICATE KEY
-        UPDATE user_name = #{user.username},user_real_name= #{user.realName},
-        user_password=#{user.password}}
-    </insert>
+    </resultMap>-->
 
     <!--获取-->
     <select id="get" parameterType="String" resultMap="resultPerson">
         SELECT *
-        FROM ws_User
+        FROM pm_user
         WHERE user_name=#{0}
-    </select>
-
-    <select id="getById" parameterType="long" resultMap="simplePerson">
-        SELECT *
-        FROM ws_User
-        WHERE user_id=#{0}
     </select>
 
 </mapper>
