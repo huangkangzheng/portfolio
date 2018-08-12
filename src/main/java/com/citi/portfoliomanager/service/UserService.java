@@ -18,24 +18,19 @@ import java.util.List;
 @Service
 public class UserService implements IUserService {
     protected static final Logger logger = LogManager.getLogger(UserService.class);
-
+    
     @Autowired
     private UserMapper userMapper;
 
     @Override
-    public User getUser(String username) {
-    	UserExample userExample=new UserExample();
-    	userExample.createCriteria().andUsernameEqualTo(username);
-    	List<User> res=userMapper.selectByExample(userExample);
-    	if(res==null||res.size()<=0) {
-    		return null;
-    	}else {
-             return res.get(0);
-    	}
+    public User getUser(Integer userId) {
+    
+    	User res=userMapper.selectByPrimaryKey(userId);
+    	return res;
     }
 
 	@Override
-	public int login(String username, String password) {
+	public User login(String username, String password) {
 		// TODO Auto-generated method stub
 		UserExample userExample=new UserExample();
     	userExample.createCriteria().andUsernameEqualTo(username);
@@ -43,24 +38,30 @@ public class UserService implements IUserService {
     	try {
     	res=userMapper.selectByExample(userExample);
     	}catch(Exception e) {
-    		
-    		return -400;
+    		User user=new User();
+    		user.setUserId(-400);
+    		return user;
     	  }
     	
     	if(res==null||res.size()<=0) {
-    		return -102;
+    		User user=new User();
+    		user.setUserId(-102);
+    		return user;
     	}else {
              User tag= res.get(0);
              if(!tag.getPassword().equals(password)) {
-            	 return -101;
+            	 tag.setUserId(-101);
+            	 return tag;
              }
              if(tag.getType()!=0&&tag.getType()!=1){
-            	 return -103;
+            	 tag.setUserId(-103);
+            	 return tag;
              }
              if(tag.getStatus()!=0) {
-            	 return -104;
+            	 tag.setUserId(-104);
+            	 return tag;
              }
-             return tag.getType();
+             return tag;
     	}
 	}
 }

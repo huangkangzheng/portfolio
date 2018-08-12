@@ -3,6 +3,9 @@ package com.citi.portfoliomanager.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.citi.portfoliomanager.entity.User;
 import com.citi.portfoliomanager.service.IService.IUserService;
+
+import javax.servlet.http.HttpSession;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,23 +34,30 @@ public class HelloController {
 
     @RequestMapping(value = "/getUser",method = RequestMethod.GET)
     @ResponseBody
-    public User getUser(@RequestParam("username")String username){
-        logger.info("param{}:username="+username);
-        User user=userService.getUser(username);
+    public User getUser(HttpSession session){
+    	Integer userId=(Integer) session.getAttribute("userId");
+        logger.info("getUser :username="+userId);
+        if(userId==null) {
+        	return null;
+        }
+        User user=userService.getUser(userId);
         return user;
     }
     
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     @ResponseBody
-    public String Login(@RequestParam("username")String username,@RequestParam("password")String password){
-        logger.info("param{}:username="+username);
-        int result=userService.login(username, password);
+    public String Login(@RequestParam("username")String username,@RequestParam("password")String password,HttpSession session){
+        logger.info("lgoin :username="+username);
+        User user=userService.login(username, password);
+        int result=user.getUserId();
         JSONObject jsonObject = new JSONObject();
         if(result<0) {
         	jsonObject.put("status", result);
         }else {
         	jsonObject.put("status", 0);
-        	jsonObject.put("type", result);
+        	jsonObject.put("type", user.getType());
+        	jsonObject.put("userId", user.getUserId());
+        	session.setAttribute("userId", user.getUserId());
         }
         return jsonObject.toString();
     }

@@ -14,7 +14,7 @@ public interface IUserService {
      * @param username
      * @return
      */
-    User getUser(String username);
-    int login(String username,String password);
+    User getUser(Integer username);
+    User login(String username,String password);
 
 }
