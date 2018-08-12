@@ -15,5 +15,6 @@ public interface IUserService {
      * @return
      */
     User getUser(String username);
+    int login(String username,String password);
 
 }

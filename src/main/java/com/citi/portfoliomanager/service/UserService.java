@@ -33,4 +33,34 @@ public class UserService implements IUserService {
              return res.get(0);
     	}
     }
+
+	@Override
+	public int login(String username, String password) {
+		// TODO Auto-generated method stub
+		UserExample userExample=new UserExample();
+    	userExample.createCriteria().andUsernameEqualTo(username);
+    	List<User> res;
+    	try {
+    	res=userMapper.selectByExample(userExample);
+    	}catch(Exception e) {
+    		
+    		return -400;
+    	  }
+    	
+    	if(res==null||res.size()<=0) {
+    		return -102;
+    	}else {
+             User tag= res.get(0);
+             if(!tag.getPassword().equals(password)) {
+            	 return -101;
+             }
+             if(tag.getType()!=0&&tag.getType()!=1){
+            	 return -103;
+             }
+             if(tag.getStatus()!=0) {
+            	 return -104;
+             }
+             return tag.getType();
+    	}
+	}
 }
