@@ -25,6 +25,9 @@ public class PortfolioController {
     @Autowired
     private IPortfolioService portfolioService;
 
+    /**
+     * Manager Module
+     */
     @CrossOrigin
     @RequestMapping(value = "createPortfolio",method = RequestMethod.GET)
     @ResponseBody
@@ -50,7 +53,7 @@ public class PortfolioController {
     @CrossOrigin
     @RequestMapping(value = "listPortfolioByUserId",method = RequestMethod.GET)
     @ResponseBody
-    public String createPortfolio(HttpSession session){
+    public String listPortfolioByUserId(HttpSession session){
         User user=(User) session.getAttribute("user");
         logger.info("listPortfolioByUserId>>>>> param={}"+user.getUserId());
         JSONObject result=new JSONObject();
@@ -60,8 +63,23 @@ public class PortfolioController {
         return result.toString();
     }
 
+    @CrossOrigin
+    @RequestMapping(value = "getPortfolioByPortfolioId",method = RequestMethod.GET)
+    @ResponseBody
+    public String getPortfolioByPortfolioId(HttpSession session,@RequestParam("portfolioId")Integer portfolioId){
+        //User user=(User) session.getAttribute("user");
+        logger.info("getPortfolioByPortfolioId>>>>> param={}"+portfolioId);
+        JSONObject result=new JSONObject();
+        Portfolio portfolio=portfolioService.getPortfolioById(portfolioId);
+        result.put("success",true);
+        result.put("data",portfolio);
+        return result.toString();
+    }
 
-    //
+
+    /**
+     * Admin` Module
+     */
     @CrossOrigin
     @RequestMapping(value = "/portfolioTransfer",method = RequestMethod.GET)
     @ResponseBody

@@ -29,6 +29,7 @@ public class PortfolioService implements IPortfolioService {
     @Override
     @Transactional
     public boolean createPortfolio(User user, String name, Double initAsset, Integer strategy) {
+        //setter
         Portfolio portfolio=new Portfolio();
         BigDecimal bInitAsset=new BigDecimal(initAsset);
         portfolio.setInitialAsset(bInitAsset);
@@ -38,8 +39,11 @@ public class PortfolioService implements IPortfolioService {
         portfolio.setName(name);
         portfolio.setStatus(DictEnum.STATUS_DEFAULT);
         try{
+            //insert a portfolio into database
             if(portfolioMapper.insert(portfolio)==1){
+                //only user's cash bigger than new portfolio's initAsset can be created
                 if(user.getCash().compareTo(bInitAsset)>=0){
+                    //bind transaction,update user's residue cash
                     user.setCash(user.getCash().subtract(bInitAsset));
                     if(userMapper.updateByPrimaryKey(user)==1)
                         return true;
@@ -57,9 +61,16 @@ public class PortfolioService implements IPortfolioService {
     public List<Portfolio> listPortfolioByUserId(Integer userId) {
         PortfolioExample portfolioExample=new PortfolioExample();
         portfolioExample.createCriteria().andUserIdEqualTo(userId);
+        //user Mapper query result
         List<Portfolio> portfolioList=new ArrayList<Portfolio>();
         portfolioList=portfolioMapper.selectByExample(portfolioExample);
         return portfolioList;
+    }
+
+    @Override
+    public Portfolio getPortfolioById(Integer portfolioId) {
+        Portfolio portfolio=portfolioMapper.selectByPrimaryKey(portfolioId);
+        return portfolio;
     }
 
 	@Override
@@ -79,6 +90,7 @@ public class PortfolioService implements IPortfolioService {
 		   }
 		}
 	}
-    
-    
+
+
+
 }

@@ -6,30 +6,13 @@ import java.util.Map;
 
 /**
  * Created by hkz on 2017/4/23.
- * 数据词典
+ * DictEnum
  */
 public class DictEnum {
 
+    /**
+     * Portfolio's default status
+     * 0 means active,1 means inactive
+     */
     public static Integer STATUS_DEFAULT=0;
-    /**-Person类别*/
-    /*public static class PersonType{
-        *//**user - 学生 *//*
-        public static final String COMMON_USER = "Student";
-        *//**artist - 管理员 *//*
-        public static final String XSC = "XSC";
-        *//**学院*//*
-        public static final String XY = "XY";
-        *//*管理员*//*
-        public static final String ADMIN = "ADMIN";
-
-        //管理员角色id，与RoleType对应
-        public static final Map jsonMap = JSONUtil.jsonToMap("{1: \"XSC\"," +
-                "4:\"XSC\"," +
-                "5:\"XSC\"," +
-                "}");
-        public static String get(long k){ //返回角色
-            if(jsonMap.get(String.valueOf(k)) != null) return XSC;
-            return COMMON_USER;
-        }
-    }*/
 }
