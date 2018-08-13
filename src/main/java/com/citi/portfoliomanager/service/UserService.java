@@ -64,4 +64,49 @@ public class UserService implements IUserService {
              return tag;
     	}
 	}
+	
+	public List<User> getUsers(int type){
+		UserExample example=new UserExample();
+		example.createCriteria().andTypeEqualTo(type).andStatusEqualTo(0);
+		return userMapper.selectByExample(example);
+	}
+
+	@Override
+	public boolean createUser(User user) {
+		// TODO Auto-generated method stub
+		if(userMapper.insert(user)==1)
+			return true;
+		else
+			return false;
+	}
+
+	@Override
+	public boolean updateUser(int userId,String password) {
+		// TODO Auto-generated method stub
+		User user=getUser(userId);
+		if(user==null) {
+			return false;
+		}
+		user.setPassword(password);
+		
+		if(userMapper.updateByPrimaryKey(user)==1)
+			return true;
+		else
+			return false;
+	}
+	
+	@Override
+	public boolean updateUser(int userId,int status) {
+		// TODO Auto-generated method stub
+		User user=getUser(userId);
+		if(user==null) {
+			return false;
+		}
+		user.setStatus(status);
+		if(userMapper.updateByPrimaryKey(user)==1)
+			return true;
+		else
+			return false;
+	}
+	
 }
