@@ -53,8 +53,10 @@ public class HelloController {
         JSONObject jsonObject = new JSONObject();
         if(result<0) {
         	jsonObject.put("status", result);
+            jsonObject.put("success",false);
         }else {
         	jsonObject.put("status", 0);
+            jsonObject.put("success", true);
         	jsonObject.put("type", user.getType());
         	jsonObject.put("userId", user.getUserId());
         	session.setAttribute("userId", user.getUserId());
