@@ -13,11 +13,12 @@
             targetProject="C:\Users\acer\git\portfolio\src\main\java" />
         <javaClientGenerator targetPackage="com.citi.portfoliomanager.dao"
             targetProject="C:\Users\acer\git\portfolio\src\main\java" type="XMLMAPPER" />
-        <table schema="CL_DEMO" tableName="pm_user" domainObjectName="User" />
+       <table schema="CL_DEMO" tableName="pm_user" domainObjectName="User" />
         <table schema="CL_DEMO" tableName="pm_portfolio" domainObjectName="Portfolio"  />
         <table schema="CL_DEMO" tableName="pm_product_history" domainObjectName="ProductHistory"/>
         <table schema="CL_DEMO" tableName="pm_position" domainObjectName="Position"/>
         <table schema="CL_DEMO" tableName="pm_position_log" domainObjectName="PositionLog"/>
-        <table schema="CL_DEMO" tableName="pm_portfolio_history" domainObjectName="PortfolioHistory"/>
+        <table schema="CL_DEMO" tableName="pm_portfolio_history" domainObjectName="PortfolioHistory"/> 
+        <table schema="CL_DEMO" tableName="pm_constant" domainObjectName="Constant"/> 
     </context>
 </generatorConfiguration>
