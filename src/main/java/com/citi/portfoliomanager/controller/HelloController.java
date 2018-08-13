@@ -10,10 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by hkz on 2017/4/23.
@@ -39,7 +36,8 @@ public class HelloController {
         logger.info("getUser "+user);
         return user;
     }
-    
+
+    @CrossOrigin
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     @ResponseBody
     public String Login(@RequestParam("username")String username,@RequestParam("password")String password,HttpSession session){
