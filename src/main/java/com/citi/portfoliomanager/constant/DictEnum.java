@@ -9,6 +9,8 @@ import java.util.Map;
  * 数据词典
  */
 public class DictEnum {
+
+    public static Integer STATUS_DEFAULT=0;
     /**-Person类别*/
     /*public static class PersonType{
         *//**user - 学生 *//*
