@@ -61,4 +61,17 @@ public class PortfolioController {
     }
 
 
+    //
+    @CrossOrigin
+    @RequestMapping(value = "/portfolioTransfer",method = RequestMethod.GET)
+    @ResponseBody
+    public String portfolioTransfer(@RequestParam(value = "portfolioId")int portfolioId,@RequestParam(value = "userId")int userId
+    		,HttpSession session) {
+    	  logger.info("portfolioTransfer");
+          JSONObject result=new JSONObject();
+          boolean tag=portfolioService.changeUserId(portfolioId, userId);
+          result.put("success", tag);
+          return result.toString();
+    }
+    
 }

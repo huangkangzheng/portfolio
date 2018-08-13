@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ public class UserController {
     @Autowired
     private IUserService userService;
     
+    @CrossOrigin
     @RequestMapping(value = "/listUsers",method = RequestMethod.GET)
     @ResponseBody
     public String getUsers(@RequestParam("type") int type,HttpSession session){
@@ -41,6 +43,7 @@ public class UserController {
         return jsonObject.toString();
     }
     
+    @CrossOrigin
     @RequestMapping(value = "/createUser ",method = RequestMethod.GET)
     @ResponseBody
     public String createUser(@RequestParam("name") String name,@RequestParam("password") String password
@@ -66,6 +69,8 @@ public class UserController {
     	jsonObject.put("success", userService.createUser(user));
         return jsonObject.toString();
     }
+    
+    @CrossOrigin
     @RequestMapping(value = "/updatePassword ",method = RequestMethod.GET)
     @ResponseBody
     public String updatePassword(@RequestParam("oldPassword") String old,@RequestParam("newPassword") String newP,HttpSession session) {
@@ -91,6 +96,7 @@ public class UserController {
     	return jsonObject.toString();
     }
     
+    @CrossOrigin
     @RequestMapping(value = "/deleteManager ",method = RequestMethod.GET)
     @ResponseBody
     public String deleleManager(@RequestParam("userId") int id,HttpSession session) {

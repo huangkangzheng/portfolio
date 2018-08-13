@@ -61,4 +61,24 @@ public class PortfolioService implements IPortfolioService {
         portfolioList=portfolioMapper.selectByExample(portfolioExample);
         return portfolioList;
     }
+
+	@Override
+	public boolean changeUserId(Integer portfolioId, Integer userId) {
+		// TODO Auto-generated method stub
+		
+		Portfolio portfolio=portfolioMapper.selectByPrimaryKey(portfolioId);
+		if(portfolio==null) {
+			return false;
+		}
+		else {
+		   portfolio.setUserId(userId);
+		   if(portfolioMapper.updateByPrimaryKey(portfolio)==1) {
+			   return true;
+		   }else {
+			   return false;
+		   }
+		}
+	}
+    
+    
 }

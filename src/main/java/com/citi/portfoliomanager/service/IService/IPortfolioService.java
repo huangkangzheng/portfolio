@@ -11,4 +11,5 @@ import java.util.List;
 public interface IPortfolioService {
     boolean createPortfolio(User user, String name, Double initAsset, Integer strategy);
     List<Portfolio> listPortfolioByUserId(Integer userId);
+    boolean changeUserId(Integer portfolioId,Integer userId);
 }
