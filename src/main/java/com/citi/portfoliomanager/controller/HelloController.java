@@ -35,12 +35,8 @@ public class HelloController {
     @RequestMapping(value = "/getUser",method = RequestMethod.GET)
     @ResponseBody
     public User getUser(HttpSession session){
-    	Integer userId=(Integer) session.getAttribute("userId");
-        logger.info("getUser :username="+userId);
-        if(userId==null) {
-        	return null;
-        }
-        User user=userService.getUser(userId);
+    	User user=(User) session.getAttribute("userId");
+        logger.info("getUser "+user);
         return user;
     }
     
@@ -59,7 +55,7 @@ public class HelloController {
             jsonObject.put("success", true);
         	jsonObject.put("type", user.getType());
         	jsonObject.put("userId", user.getUserId());
-        	session.setAttribute("userId", user.getUserId());
+        	session.setAttribute("user", user);
         }
         return jsonObject.toString();
     }
