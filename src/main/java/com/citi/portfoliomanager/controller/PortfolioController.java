@@ -66,7 +66,7 @@ public class PortfolioController {
         logger.info("listPortfolioByUserId>>>>> param={}"+user.getUserId());
         JSONObject result=new JSONObject();
         List<Portfolio> portfolioList=portfolioService.listPortfolioByUserId(user.getUserId());
-
+        portfolioList=calculateRateService.portfolioRateOfReturn(portfolioList);
         result.put("success",true);
         result.put("data",portfolioList);
         return result.toString();
