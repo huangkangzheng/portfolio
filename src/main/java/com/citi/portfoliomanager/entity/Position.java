@@ -60,7 +60,41 @@ public class Position {
      *
      * @mbggenerated Tue Aug 14 15:49:22 CST 2018
      */
-    public Integer getPositionId() {
+    
+    private BigDecimal curPrice;
+    private BigDecimal totalValue;
+    private BigDecimal rateOfreturn;
+    
+    
+    
+    public BigDecimal getCurPrice() {
+		return curPrice;
+	}
+
+	public void setCurPrice(BigDecimal curPrice) {
+		this.curPrice = curPrice;
+		this.totalValue = curPrice.multiply(new BigDecimal(this.quantity));
+		this.rateOfreturn = (curPrice.divide(buyPrice,8,BigDecimal.ROUND_HALF_DOWN).subtract(new BigDecimal(1)));
+	}
+
+	public BigDecimal getTotalValue() {
+		return totalValue;
+	}
+
+	public void setTotalValue(BigDecimal totalValue) {
+		this.totalValue = totalValue;
+		
+	}
+
+	public BigDecimal getRateOfreturn() {
+		return rateOfreturn;
+	}
+
+	public void setRateOfreturn(BigDecimal rateOfreturn) {
+		this.rateOfreturn = rateOfreturn;
+	}
+
+	public Integer getPositionId() {
         return positionId;
     }
 

@@ -90,7 +90,7 @@ public class PositionService implements IPositionService{
             if(currentQuantity==0)
                 break;
             //currentQuantity bigger than position'qty, then delete record
-            BigDecimal rate=productHistory.getPrice().divide(position.getBuyPrice());
+            BigDecimal rate=productHistory.getPrice().divide(position.getBuyPrice(),15,BigDecimal.ROUND_HALF_DOWN);
             rate=rate.subtract(new BigDecimal(1));
             if(currentQuantity>=position.getQuantity()){
                 insertTrade(position.getProductDate(),position.getBuyPrice(),productHistory.getGenerateDate(),productHistory.getPrice(),position.getQuantity(),rate,position.getProductName());
@@ -184,4 +184,6 @@ public class PositionService implements IPositionService{
             return true;
         return false;
     }
+
+	
 }

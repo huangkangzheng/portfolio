@@ -21,6 +21,9 @@ public interface IPositionService {
 
     //listPositionByPortfolioIdAndProductName
     List<Position> listPositionByPortfolioIdAndProductName(Integer portfolioId,String productName);
+    
+    //listPositionByPortfolioIdAndProductName
+   // List<Position> listPositionByPortfolioId(Integer portfolioId);
 
     //delete position
     boolean deletePosition(Integer positionId);
