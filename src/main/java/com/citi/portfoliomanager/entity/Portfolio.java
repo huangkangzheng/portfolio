@@ -67,7 +67,38 @@ public class Portfolio {
      *
      * @mbggenerated Mon Aug 13 12:02:45 CST 2018
      */
-    public Integer getPortfolioId() {
+    
+    private BigDecimal rateOfReturn;
+    private BigDecimal totalAssert;
+    
+    
+    
+    public BigDecimal getTotalAssert() {
+		return totalAssert;
+	}
+
+
+
+	public void setRateOfReturn(BigDecimal rateOfReturn) {
+		this.rateOfReturn = rateOfReturn;
+	}
+
+
+
+	public void setTotalAssert(BigDecimal totalAssert) {
+		this.totalAssert = totalAssert;
+		this.rateOfReturn = totalAssert.subtract(initialAsset).divide(initialAsset);
+	}
+
+
+
+	public BigDecimal getRateOfReturn() {
+		return rateOfReturn;
+	}
+
+	
+
+	public Integer getPortfolioId() {
         return portfolioId;
     }
 

@@ -42,30 +42,34 @@ public class CalculateRateService implements ICalculateRateService{
 	    public double portfolioRateOfReturn(int portfolioId) {
 	    	return 0.0;
 	    }
-	    @Override
-       public Map<Integer,Double> portfolioRateOfReturn() {
-	    	return null;
-	    }
+	
 
+	    
+
+	    
+	    
 	@Override
 	public List<Portfolio> sortportfolioByRateOfReturn() {
 		// TODO Auto-generated method stub
 		PortfolioExample pe=new PortfolioExample();
-		pe.createCriteria();
+		pe.createCriteria().andStatusEqualTo(0);
 		List<Portfolio>portfolios=portfolioMapper.selectByExample(pe);
 		PositionExample oe=new PositionExample();
-		oe.createCriteria();
 		List<Position> positions=positionMapper.selectByExample(oe);
-		final Map<Integer,BigDecimal> rateMap=calPortfolioByRate(portfolios,calPosition(positions,buildProductHistoryMap()));
+		final Map<Integer,BigDecimal> rateMap=calPortfolioAsset(portfolios,calPosition(positions,buildProductHistoryMap()));
+		for(Portfolio port:portfolios) {
+			port.setTotalAssert(rateMap.getOrDefault(port.getPortfolioId(), port.getCash()));
+		    
+		}
 		Collections.sort(portfolios, new Comparator<Portfolio>() {
 
 			@Override
 			public int compare(Portfolio o1, Portfolio o2) {
 				// TODO Auto-generated method stub
-				BigDecimal bd2=rateMap.get(o1.getPortfolioId());
-				BigDecimal bd1=rateMap.get(o2.getPortfolioId());
-				return bd1.compareTo(bd2);
+			
+				return o2.getRateOfReturn().compareTo(o1.getRateOfReturn());
 			}});
+		
 		return portfolios;
 	}
 	
@@ -88,17 +92,37 @@ public class CalculateRateService implements ICalculateRateService{
 	    return result;
 	}
 	
-	private Map<Integer,BigDecimal>calPortfolioByRate(List<Portfolio>portfolios,Map<Integer,BigDecimal> positionTotal){
+	private Map<Integer,BigDecimal>calPortfolioAsset(List<Portfolio>portfolios,Map<Integer,BigDecimal> positionTotal){
 		Map<Integer,BigDecimal>res=new TreeMap<>();
 		for(Portfolio port:portfolios) {
 			BigDecimal bd=port.getCash();
 			if(positionTotal.get(port.getPortfolioId())!=null){
 			     bd=bd.add(positionTotal.get(port.getPortfolioId()));
+			}else {
+				bd=bd.add(new BigDecimal(0));
 			}
-			bd=bd.divide(port.getInitialAsset());
+			//bd=bd.divide(port.getInitialAsset());
 			res.put(port.getPortfolioId(), bd);
 		}
 		return res;
+	}
+
+
+
+
+
+
+	@Override
+	public List<Portfolio> portfolioRateOfReturn(List<Portfolio> protfolios) {
+		// TODO Auto-generated method stub
+		PositionExample pe=new PositionExample();
+		List<Position> positions=positionMapper.selectByExample(pe);
+		final Map<Integer,BigDecimal> rateMap=calPortfolioAsset(protfolios,calPosition(positions,buildProductHistoryMap()));
+		for(Portfolio port:protfolios) {
+			port.setTotalAssert(rateMap.getOrDefault(port.getPortfolioId(), port.getCash()));
+		    
+		}
+		return protfolios;
 	}
 
 	
