@@ -1,9 +1,12 @@
 package com.citi.portfoliomanager.service.IService;
 
 import com.citi.portfoliomanager.entity.Portfolio;
+import com.citi.portfoliomanager.entity.PortfolioHistory;
+import com.citi.portfoliomanager.entity.ProductHistory;
 import com.citi.portfoliomanager.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by hkz on 2018/8/13.
@@ -20,4 +23,6 @@ public interface IPortfolioService {
 
     //get portfolio By portfolioId
     Portfolio getPortfolioById(Integer portfolioId);
+
+    Map<String,Object> queryRate(Integer portfolioId, String productName);
 }

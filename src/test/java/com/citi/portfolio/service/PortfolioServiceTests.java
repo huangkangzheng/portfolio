@@ -3,6 +3,7 @@ package com.citi.portfolio.service;
 import com.citi.portfolio.AppTests;
 import com.citi.portfoliomanager.entity.User;
 import com.citi.portfoliomanager.service.IService.IPortfolioService;
+import com.citi.portfoliomanager.util.JSONUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,5 +30,10 @@ public class PortfolioServiceTests extends AppTests{
         User user =new User();
         user.setUserId(2);
         portfolioService.createPortfolio(user,"portfolio1",10000000.0,0);
+    }
+
+    @Test
+    public void queryRate() throws Exception{
+        System.out.println(JSONUtil.toJsonString(portfolioService.queryRate(1,"Nikkei")));
     }
 }

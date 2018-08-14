@@ -1,19 +1,19 @@
 package com.citi.portfoliomanager.service;
 
 import com.citi.portfoliomanager.constant.DictEnum;
+import com.citi.portfoliomanager.constant.SystemDate;
+import com.citi.portfoliomanager.dao.PortfolioHistoryMapper;
 import com.citi.portfoliomanager.dao.PortfolioMapper;
+import com.citi.portfoliomanager.dao.ProductHistoryMapper;
 import com.citi.portfoliomanager.dao.UserMapper;
-import com.citi.portfoliomanager.entity.Portfolio;
-import com.citi.portfoliomanager.entity.PortfolioExample;
-import com.citi.portfoliomanager.entity.User;
+import com.citi.portfoliomanager.entity.*;
 import com.citi.portfoliomanager.service.IService.IPortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by hkz on 2018/8/13.
@@ -25,6 +25,10 @@ public class PortfolioService implements IPortfolioService {
     private PortfolioMapper portfolioMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private PortfolioHistoryMapper portfolioHistoryMapper;
+    @Autowired
+    private ProductHistoryMapper productHistoryMapper;
 
     @Override
     @Transactional
@@ -73,7 +77,7 @@ public class PortfolioService implements IPortfolioService {
         return portfolio;
     }
 
-	@Override
+    @Override
 	public boolean changeUserId(Integer portfolioId, Integer userId) {
 		// TODO Auto-generated method stub
 		
@@ -91,6 +95,43 @@ public class PortfolioService implements IPortfolioService {
 		}
 	}
 
+    @Override
+    public Map<String, Object> queryRate(Integer portfolioId, String productName) {
+        Map<String,Object> result=new HashMap<String,Object>();
+        Date today= SystemDate.getSysDate();
+        List<PortfolioHistory> portfolioHistoryList=new ArrayList<PortfolioHistory>();
+        List<ProductHistory> productHistoryList=new ArrayList<ProductHistory>();
+        for(int i=DictEnum.DATA_LIST_NUM;i>=1;i--){
+            Date begin=new Date(today.getTime()-DictEnum.EACH_DAY*i);
+            PortfolioHistoryExample portfolioHistoryExample=new PortfolioHistoryExample();
+            portfolioHistoryExample.clear();
+            portfolioHistoryExample.createCriteria().andCalDateEqualTo(begin).andPortfolioIdEqualTo(portfolioId);
+            List<PortfolioHistory> temp=portfolioHistoryMapper.selectByExample(portfolioHistoryExample);
+            if(temp.size()==0){
+                portfolioHistoryList.add(null);
+            }
+            else
+                portfolioHistoryList.add(temp.get(0));
+            ProductHistoryExample productHistoryExample=new ProductHistoryExample();
+            portfolioHistoryExample.clear();
+            productHistoryExample.createCriteria().andGenerateDateEqualTo(begin).andNameEqualTo(productName);
+            List<ProductHistory> temp2=productHistoryMapper.selectByExample(productHistoryExample);
+            if(temp2.size()==0)
+                productHistoryList.add(null);
+            else
+                productHistoryList.add(temp2.get(0));
+        }
+        result.put("portfolioList",portfolioHistoryList);
+        result.put("productList",productHistoryList);
 
+
+        /*Collections.sort(portfolioHistoryList, new Comparator<PortfolioHistory>() {
+            @Override
+            public int compare(PortfolioHistory o1, PortfolioHistory o2) {
+                return o1.getCalDate().compareTo(o2.getCalDate());
+            }
+        });*/
+        return result;
+    }
 
 }

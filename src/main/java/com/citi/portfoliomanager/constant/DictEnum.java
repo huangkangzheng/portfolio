@@ -25,4 +25,8 @@ public class DictEnum {
         public static final Integer LIFO=0;
         public static final Integer FIFO=1;
     }
+
+    public static final Integer EACH_DAY=24*3600000;
+
+    public static final Integer DATA_LIST_NUM=20;
 }

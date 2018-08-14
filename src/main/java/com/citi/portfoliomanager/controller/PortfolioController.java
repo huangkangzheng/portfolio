@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.sound.sampled.Port;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by hkz on 2018/8/13.
@@ -106,6 +107,20 @@ public class PortfolioController {
             data.put("cash",portfolio.getCash());
             data.put("price",productHistory.getPrice());
         }
+        result.put("data",data);
+        return result.toString();
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "queryRateByPortfolio",method = RequestMethod.GET)
+    @ResponseBody
+    public String queryRateByPortfolio(HttpSession session,@RequestParam("portfolioId")Integer portfolioId,
+                                               @RequestParam("productName")String productName){
+        //User user=(User) session.getAttribute("user");
+        logger.info("queryRateByPortfolio>>>>> param={}"+portfolioId+" "+productName);
+        JSONObject result=new JSONObject();
+        Map<String,Object> data=portfolioService.queryRate(portfolioId,productName);
+        result.put("success",true);
         result.put("data",data);
         return result.toString();
     }
