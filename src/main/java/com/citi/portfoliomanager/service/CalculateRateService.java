@@ -58,7 +58,7 @@ public class CalculateRateService implements ICalculateRateService{
 		List<Position> positions=positionMapper.selectByExample(oe);
 		final Map<Integer,BigDecimal> rateMap=calPortfolioAsset(portfolios,calPosition(positions,buildProductHistoryMap()));
 		for(Portfolio port:portfolios) {
-			port.setTotalAssert(rateMap.getOrDefault(port.getPortfolioId(), port.getCash()));
+			port.setTotalAsset(rateMap.getOrDefault(port.getPortfolioId(), port.getCash()));
 		    
 		}
 		Collections.sort(portfolios, new Comparator<Portfolio>() {
@@ -119,7 +119,7 @@ public class CalculateRateService implements ICalculateRateService{
 		List<Position> positions=positionMapper.selectByExample(pe);
 		final Map<Integer,BigDecimal> rateMap=calPortfolioAsset(protfolios,calPosition(positions,buildProductHistoryMap()));
 		for(Portfolio port:protfolios) {
-			port.setTotalAssert(rateMap.getOrDefault(port.getPortfolioId(), port.getCash()));
+			port.setTotalAsset(rateMap.getOrDefault(port.getPortfolioId(), port.getCash()));
 		    
 		}
 		return protfolios;

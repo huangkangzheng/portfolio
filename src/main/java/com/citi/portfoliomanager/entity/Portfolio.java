@@ -69,12 +69,12 @@ public class Portfolio {
      */
     
     private BigDecimal rateOfReturn;
-    private BigDecimal totalAssert;
+    private BigDecimal totalAsset;
     
     
     
-    public BigDecimal getTotalAssert() {
-		return totalAssert;
+    public BigDecimal getTotalAsset() {
+		return totalAsset;
 	}
 
 
@@ -85,8 +85,8 @@ public class Portfolio {
 
 
 
-	public void setTotalAssert(BigDecimal totalAssert) {
-		this.totalAssert = totalAssert;
+	public void setTotalAsset(BigDecimal totalAssert) {
+		this.totalAsset = totalAssert;
 		this.rateOfReturn = totalAssert.subtract(initialAsset).divide(initialAsset);
 	}
 
