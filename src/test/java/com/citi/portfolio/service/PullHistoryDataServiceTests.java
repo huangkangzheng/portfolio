@@ -24,7 +24,6 @@ public class PullHistoryDataServiceTests {
 	
 	
 	@Test
-	@Ignore
 	public void pullDataToDBTest(){
 		
 		service.pullDataToDB("G:\\Portfolio Data\\data");

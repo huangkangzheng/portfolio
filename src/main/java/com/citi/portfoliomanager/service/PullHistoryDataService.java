@@ -158,7 +158,7 @@ public class PullHistoryDataService implements IPullHistoryDataService{
     	int month=Month.valueOf(info.substring(0, 3)).ordinal();
     	int day=Integer.valueOf(info.substring(4,6));
     	int year=Integer.valueOf(info.substring(8,12));
-    	return new Date(year-1900,month,day);
+    	return new Date(year-1900,month-1,day);
     }
     
     private BigDecimal doubleParser(String info) {
