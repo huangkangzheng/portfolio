@@ -15,4 +15,14 @@ public class DictEnum {
      * 0 means active,1 means inactive
      */
     public static Integer STATUS_DEFAULT=0;
+
+    public static class Side{
+        public static final Integer BUY=0;
+        public static final Integer SELL=1;
+    }
+
+    public static class Strategy{
+        public static final Integer LIFO=0;
+        public static final Integer FIFO=1;
+    }
 }

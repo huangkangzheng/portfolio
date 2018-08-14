@@ -1,9 +1,12 @@
 package com.citi.portfoliomanager.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.citi.portfoliomanager.constant.SystemDate;
 import com.citi.portfoliomanager.entity.Portfolio;
+import com.citi.portfoliomanager.entity.ProductHistory;
 import com.citi.portfoliomanager.entity.User;
 import com.citi.portfoliomanager.service.IService.IPortfolioService;
+import com.citi.portfoliomanager.service.IService.IProductHistoryService;
 import com.citi.portfoliomanager.service.PortfolioService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,6 +27,8 @@ public class PortfolioController {
 
     @Autowired
     private IPortfolioService portfolioService;
+    @Autowired
+    private IProductHistoryService productHistoryService;
 
     /**
      * Manager Module
@@ -73,6 +78,31 @@ public class PortfolioController {
         Portfolio portfolio=portfolioService.getPortfolioById(portfolioId);
         result.put("success",true);
         result.put("data",portfolio);
+        return result.toString();
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "getCashAndProductPrice",method = RequestMethod.GET)
+    @ResponseBody
+    public String getCashAndPriceByPortfolioId(HttpSession session,@RequestParam("portfolioId")Integer portfolioId,
+                                               @RequestParam("productName")String productName){
+        //User user=(User) session.getAttribute("user");
+        logger.info("getCashAndPriceByPortfolioId>>>>> param={}"+portfolioId+" "+productName);
+        JSONObject result=new JSONObject();
+        Portfolio portfolio=portfolioService.getPortfolioById(portfolioId);
+        ProductHistory productHistory=productHistoryService.getProductHistory(SystemDate.getSysDate(),productName);
+        result.put("success",true);
+
+        JSONObject data=new JSONObject();
+        if(productHistory==null){
+            data.put("status",false);
+        }
+        else {
+            data.put("status",true);
+            data.put("cash",portfolio.getCash());
+            data.put("price",productHistory.getPrice());
+        }
+        result.put("data",data);
         return result.toString();
     }
 
