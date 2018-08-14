@@ -5,6 +5,7 @@ import com.citi.portfoliomanager.constant.SystemDate;
 import com.citi.portfoliomanager.entity.Portfolio;
 import com.citi.portfoliomanager.entity.ProductHistory;
 import com.citi.portfoliomanager.entity.User;
+import com.citi.portfoliomanager.service.IService.ICalculateRateService;
 import com.citi.portfoliomanager.service.IService.IPortfolioService;
 import com.citi.portfoliomanager.service.IService.IProductHistoryService;
 import com.citi.portfoliomanager.service.PortfolioService;
@@ -29,6 +30,8 @@ public class PortfolioController {
     private IPortfolioService portfolioService;
     @Autowired
     private IProductHistoryService productHistoryService;
+    @Autowired
+    private ICalculateRateService calculateRateService;
 
     /**
      * Manager Module
@@ -63,6 +66,7 @@ public class PortfolioController {
         logger.info("listPortfolioByUserId>>>>> param={}"+user.getUserId());
         JSONObject result=new JSONObject();
         List<Portfolio> portfolioList=portfolioService.listPortfolioByUserId(user.getUserId());
+
         result.put("success",true);
         result.put("data",portfolioList);
         return result.toString();

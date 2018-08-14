@@ -57,6 +57,7 @@ public class PositionController {
 
         result.put("success",true);
         result.put("data",data);
+
         return result.toString();
     }
 }

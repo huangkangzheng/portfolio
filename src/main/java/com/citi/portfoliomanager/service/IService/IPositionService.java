@@ -2,6 +2,7 @@ package com.citi.portfoliomanager.service.IService;
 
 import com.citi.portfoliomanager.entity.Position;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -26,4 +27,10 @@ public interface IPositionService {
 
     //update position quantity
     boolean updatePositionQuantity(Integer positionId,Integer newQuantity);
+
+    /**
+     * positionHistory,Trade
+     */
+    //save log
+    boolean insertTrade(Date buyDate, BigDecimal buyPrice,Date sellDate, BigDecimal sellPrice,Integer quantity,BigDecimal ratesOfReturn,String productName);
 }

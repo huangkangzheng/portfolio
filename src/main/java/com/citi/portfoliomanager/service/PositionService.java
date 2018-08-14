@@ -1,9 +1,7 @@
 package com.citi.portfoliomanager.service;
 
 import com.citi.portfoliomanager.constant.DictEnum;
-import com.citi.portfoliomanager.dao.PortfolioMapper;
-import com.citi.portfoliomanager.dao.PositionMapper;
-import com.citi.portfoliomanager.dao.ProductHistoryMapper;
+import com.citi.portfoliomanager.dao.*;
 import com.citi.portfoliomanager.entity.*;
 import com.citi.portfoliomanager.service.IService.IPositionService;
 import javafx.geometry.Pos;
@@ -29,6 +27,8 @@ public class PositionService implements IPositionService{
     private PositionMapper positionMapper;
     @Autowired
     private PortfolioMapper portfolioMapper;
+    @Autowired
+    private TradeMapper tradeMapper;
 
     @Override
     @Transactional
@@ -46,6 +46,7 @@ public class PositionService implements IPositionService{
         position.setProductDate(today);
         position.setProductName(productName);
         position.setQuantity(quantity);
+        position.setBuyPrice(productHistory.getPrice());
         //insert record
         if(positionMapper.insert(position)==1){
             //calculate order cost
@@ -82,18 +83,23 @@ public class PositionService implements IPositionService{
         if(portfolio.getStrategy().equals(DictEnum.Strategy.FIFO))
             Collections.reverse(positionList);
 
+
         //use strategy, change positions
         Integer currentQuantity=quantity;
         for(Position position:positionList){
             if(currentQuantity==0)
                 break;
             //currentQuantity bigger than position'qty, then delete record
+            BigDecimal rate=productHistory.getPrice().divide(position.getBuyPrice());
+            rate=rate.subtract(new BigDecimal(1));
             if(currentQuantity>=position.getQuantity()){
+                insertTrade(position.getProductDate(),position.getBuyPrice(),productHistory.getGenerateDate(),productHistory.getPrice(),position.getQuantity(),rate,position.getProductName());
                 deletePosition(position.getPositionId());
                 currentQuantity-=position.getQuantity();
             }
             //otherwise,write down corresponding position quantity
             else{
+                insertTrade(position.getProductDate(),position.getBuyPrice(),productHistory.getGenerateDate(),productHistory.getPrice(),currentQuantity,rate,position.getProductName());
                 Integer restQuantity=position.getQuantity()-currentQuantity;
                 updatePositionQuantity(position.getPositionId(),restQuantity);
             }
@@ -160,6 +166,21 @@ public class PositionService implements IPositionService{
         Position position=positionMapper.selectByPrimaryKey(positionId);
         position.setQuantity(newQuantity);
         if(positionMapper.updateByPrimaryKey(position)==1)
+            return true;
+        return false;
+    }
+
+    @Override
+    public boolean insertTrade(Date buyDate, BigDecimal buyPrice, Date sellDate, BigDecimal sellPrice, Integer quantity, BigDecimal rateOfReturn, String productName) {
+        Trade trade=new Trade();
+        trade.setBuyDate(buyDate);
+        trade.setBuyPrice(buyPrice);
+        trade.setSellDate(sellDate);
+        trade.setSellPrice(sellPrice);
+        trade.setQuantity(quantity);
+        trade.setProductName(productName);
+        trade.setRateOfReturn(rateOfReturn);
+        if(tradeMapper.insert(trade)==1)
             return true;
         return false;
     }
