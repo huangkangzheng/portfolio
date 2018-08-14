@@ -9,5 +9,6 @@ public interface ICalculateRateService {
    public  double portfolioRateOfReturn(int portfolioId);  
    public List<Portfolio> portfolioRateOfReturn(List<Portfolio> protfolios); 
    public List<Portfolio> sortportfolioByRateOfReturn();
+   boolean updatePortfolioHistory();
    
 }

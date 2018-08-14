@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,14 +31,16 @@ import com.citi.portfoliomanager.service.IService.ICalculateRateService;
 
 @Service
 public class CalculateRateService implements ICalculateRateService{
+	
+	   Logger logger=LogManager.getLogger(CalculateRateService.class.getName());
 	    @Autowired
 	    private PortfolioMapper portfolioMapper;
-	    @Autowired
-	    private UserMapper userMapper;
 	    @Autowired
 	    private ProductHistoryMapper productHistoryMapper;
 	    @Autowired
 	    private PositionMapper positionMapper;
+	    @Autowired
+	    private PortfolioHistoryMapper portfolioHistoryMapper;
 	    
 	    @Override
 	    public double portfolioRateOfReturn(int portfolioId) {
@@ -123,6 +127,35 @@ public class CalculateRateService implements ICalculateRateService{
 		    
 		}
 		return protfolios;
+	}
+
+
+
+
+
+
+	@Override
+	public boolean updatePortfolioHistory() {
+		// TODO Auto-generated method stub
+		try {
+		PortfolioExample pe=new PortfolioExample();
+		pe.createCriteria().andStatusEqualTo(0);
+		List<Portfolio>portfolios=portfolioMapper.selectByExample(pe);
+		PositionExample oe=new PositionExample();
+		List<Position> positions=positionMapper.selectByExample(oe);
+		final Map<Integer,BigDecimal> rateMap=calPortfolioAsset(portfolios,calPosition(positions,buildProductHistoryMap()));
+		for(Portfolio pos:portfolios) {
+			PortfolioHistory record=new PortfolioHistory();
+			record.setCalDate(SystemDate.getSysDate());
+			record.setPortfolioId(pos.getPortfolioId());
+			record.setTotalAsset(rateMap.get(pos.getPortfolioId()));
+			portfolioHistoryMapper.insert(record);
+		}
+		return true;
+		}catch(Exception e) {
+			logger.error("update PortfolioHistory "+e.getMessage());
+		   return false;	
+		}
 	}
 
 	

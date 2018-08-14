@@ -30,5 +30,12 @@ public class SystemDate {
 		pres.putInt("day",cal.get(Calendar.DATE));
 	}
 	
+	public static void reSetSysDate(int year,int month,int day) {
+		Preferences pres= Preferences.userRoot().node("SystemDate");
+		pres.putInt("year", year);
+		pres.putInt("month", month);
+		pres.putInt("day",day);
+		sysDate=new Date(year-1900,month-1,day);
+	}
        
 }
