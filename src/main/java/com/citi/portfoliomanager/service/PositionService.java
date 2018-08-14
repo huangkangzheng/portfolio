@@ -1,17 +1,19 @@
 package com.citi.portfoliomanager.service;
 
+import com.citi.portfoliomanager.constant.DictEnum;
 import com.citi.portfoliomanager.dao.PortfolioMapper;
 import com.citi.portfoliomanager.dao.PositionMapper;
 import com.citi.portfoliomanager.dao.ProductHistoryMapper;
-import com.citi.portfoliomanager.entity.Portfolio;
-import com.citi.portfoliomanager.entity.Position;
-import com.citi.portfoliomanager.entity.ProductHistory;
-import com.citi.portfoliomanager.entity.ProductHistoryExample;
+import com.citi.portfoliomanager.entity.*;
 import com.citi.portfoliomanager.service.IService.IPositionService;
+import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class PositionService implements IPositionService{
     private PortfolioMapper portfolioMapper;
 
     @Override
+    @Transactional
     public boolean buyProduct(Integer portfolioId, Date today, String productName, Integer quantity) {
 
         //select ProductHistory by today and name
@@ -61,6 +64,7 @@ public class PositionService implements IPositionService{
     }
 
     @Override
+    @Transactional
     public boolean sellProduct(Integer portfolioId, Date today, String productName, Integer quantity) {
 
         //select ProductHistory by today and name
@@ -69,16 +73,35 @@ public class PositionService implements IPositionService{
         List<ProductHistory> productHistoryList=productHistoryMapper.selectByExample(productHistoryExample);
         ProductHistory productHistory=productHistoryList.get(0);
 
-        //insert a Position record
-        Position position=new Position();
-        position.setPortfolioId(portfolioId);
-        position.setProductDate(today);
-        position.setProductName(productName);
-        position.setQuantity(quantity);
+        Portfolio portfolio=portfolioMapper.selectByPrimaryKey(portfolioId);
+
+        //positionList sort by date desc (LIFO)
+        List<Position> positionList=listPositionByPortfolioIdAndProductName(portfolioId,productName);
+
+        //judge strategy, 0 means LIFO, 1 means FIFO
+        if(portfolio.getStrategy().equals(DictEnum.Strategy.FIFO))
+            Collections.reverse(positionList);
+
+        //use strategy, change positions
+        Integer currentQuantity=quantity;
+        for(Position position:positionList){
+            if(currentQuantity==0)
+                break;
+            //currentQuantity bigger than position'qty, then delete record
+            if(currentQuantity>=position.getQuantity()){
+                deletePosition(position.getPositionId());
+                currentQuantity-=position.getQuantity();
+            }
+            //otherwise,write down corresponding position quantity
+            else{
+                Integer restQuantity=position.getQuantity()-currentQuantity;
+                updatePositionQuantity(position.getPositionId(),restQuantity);
+            }
+        }
 
         //calculate order income
         BigDecimal income=productHistory.getPrice().multiply(new BigDecimal(quantity));
-        Portfolio portfolio=portfolioMapper.selectByPrimaryKey(portfolioId);
+
         //calculate portfolio's residueCash
         BigDecimal residueCash=portfolio.getCash().add(income);
         portfolio.setCash(residueCash);
@@ -87,6 +110,57 @@ public class PositionService implements IPositionService{
         if(portfolioMapper.updateByPrimaryKey(portfolio)==1){
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean processProduct(Integer portfolioId, Date today, String name, Integer quantity, Integer side) {
+        boolean flag;
+        if(side.equals(DictEnum.Side.BUY))
+            flag=buyProduct(portfolioId,today,name,quantity);
+        else
+            flag=sellProduct(portfolioId,today,name,quantity);
+        return flag;
+    }
+
+    /**
+     * sorted positionList (By Date Desc)
+     * @param portfolioId
+     * @param productName
+     * @return
+     */
+    @Override
+    public List<Position> listPositionByPortfolioIdAndProductName(Integer portfolioId, String productName) {
+        PositionExample positionExample=new PositionExample();
+        positionExample.createCriteria().andPortfolioIdEqualTo(portfolioId).andProductNameEqualTo(productName);
+        List<Position> positionList=positionMapper.selectByExample(positionExample);
+        Collections.sort(positionList,new Comparator<Position>(){
+            @Override
+            public int compare(Position o1, Position o2) {
+                if(o1.getProductDate().compareTo(o2.getProductDate())>0)
+                    return -1;
+                else if(o1.getProductDate().compareTo(o2.getProductDate())==0)
+                    return 0;
+                else
+                    return 1;
+            }
+        });
+        return positionList;
+    }
+
+    @Override
+    public boolean deletePosition(Integer positionId) {
+        if(positionMapper.deleteByPrimaryKey(positionId)==1)
+            return true;
+        return false;
+    }
+
+    @Override
+    public boolean updatePositionQuantity(Integer positionId, Integer newQuantity) {
+        Position position=positionMapper.selectByPrimaryKey(positionId);
+        position.setQuantity(newQuantity);
+        if(positionMapper.updateByPrimaryKey(position)==1)
+            return true;
         return false;
     }
 }
