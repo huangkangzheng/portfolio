@@ -1,7 +1,10 @@
 package com.citi.portfoliomanager.dao;
 
+import com.citi.portfoliomanager.entity.PortfolioHistory;
 import com.citi.portfoliomanager.entity.ProductHistory;
 import com.citi.portfoliomanager.entity.ProductHistoryExample;
+
+import java.util.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -93,4 +96,7 @@ public interface ProductHistoryMapper {
      * @mbggenerated Mon Aug 13 12:02:45 CST 2018
      */
     int updateByPrimaryKey(ProductHistory record);
+    
+    
+    List<ProductHistory> selectEachLeastRencently(@Param("curdate")Date curdate);
 }

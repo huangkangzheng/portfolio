@@ -378,4 +378,8 @@
       open = #{open,jdbcType=DECIMAL}
     where product_history_id = #{productHistoryId,jdbcType=INTEGER}
   </update>
+  
+   <select id="selectEachLeastRencently" resultMap="BaseResultMap">
+    select * from pm_product_history where generate_date&lt;= #{curdate,jdbcType=TIMESTAMP} group by name
+  </select>
 </mapper>
