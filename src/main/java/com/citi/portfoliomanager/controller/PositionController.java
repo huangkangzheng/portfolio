@@ -33,7 +33,7 @@ public class PositionController {
     @CrossOrigin
     @RequestMapping(value = "processProduct",method = RequestMethod.GET)
     @ResponseBody
-    public String processProduct(HttpSession session, @RequestParam(value = "portfolioId")Integer portfolioId,
+    public String processProduct( @RequestParam(value = "portfolioId")Integer portfolioId,
                                  @RequestParam("productName")String productName,
                                   @RequestParam("quantity")Integer quantity,@RequestParam("side")Integer side){
         logger.info("processProduct>>>>>>param{}:"+portfolioId+" "+productName+" "+quantity+" "+side);
@@ -48,7 +48,7 @@ public class PositionController {
     @CrossOrigin
     @RequestMapping(value = "getQuantityByPortfolioIdAndProductName",method = RequestMethod.GET)
     @ResponseBody
-    public String getQuantityByPortfolioIdAndProductName(HttpSession session, @RequestParam(value = "portfolioId")Integer portfolioId,
+    public String getQuantityByPortfolioIdAndProductName( @RequestParam(value = "portfolioId")Integer portfolioId,
                                  @RequestParam("productName")String productName){
         logger.info("getQuantityByPortfolioIdAndProductName>>>>>>param{}:"+portfolioId+" "+productName);
         JSONObject result=new JSONObject();

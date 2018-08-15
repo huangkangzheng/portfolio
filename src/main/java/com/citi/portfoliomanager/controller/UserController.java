@@ -29,15 +29,9 @@ public class UserController {
     @CrossOrigin
     @RequestMapping(value = "/listUsers",method = RequestMethod.GET)
     @ResponseBody
-    public String getUsers(@RequestParam("type") int type,HttpSession session){
+    public String getUsers(@RequestParam("type") int type){
     	JSONObject jsonObject = new JSONObject();
     	logger.info("listUsers by ");
-    	if(!authorityCheck(session)) {
-    		jsonObject.put("success",false);
-    		logger.info("attempt to do something without authority");
-    		jsonObject.put("info",StatusConstant.PERMITTION_DENY );
-    		return jsonObject.toString();
-    	}
     	jsonObject.put("success",true);
     	jsonObject.put("data",userService.getUsers(type));
         return jsonObject.toString();
@@ -47,7 +41,7 @@ public class UserController {
     @RequestMapping(value = "/createUser ",method = RequestMethod.GET)
     @ResponseBody
     public String createUser(@RequestParam("name") String name,@RequestParam("password") String password
-    		,@RequestParam("initCash") String initCash,HttpSession session){
+    		,@RequestParam("initCash") String initCash){
     	User user=new User();
     	logger.info("create a user "+name+" with "+initCash);
     	user.setUsername(name);
@@ -73,8 +67,8 @@ public class UserController {
     @CrossOrigin
     @RequestMapping(value = "/updatePassword ",method = RequestMethod.GET)
     @ResponseBody
-    public String updatePassword(@RequestParam("oldPassword") String old,@RequestParam("newPassword") String newP,HttpSession session) {
-    	User user=(User) session.getAttribute("user");
+    public String updatePassword(@RequestParam("oldPassword") String old,@RequestParam("newPassword") String newP,@RequestParam("userId") int userId) {
+    	User user=userService.getUser(userId);
     	JSONObject jsonObject = new JSONObject();
     	if(user==null) {
     		logger.info("ghost login user");
@@ -102,9 +96,9 @@ public class UserController {
     @CrossOrigin
     @RequestMapping(value = "/deleteManager ",method = RequestMethod.GET)
     @ResponseBody
-    public String deleleManager(@RequestParam("userId") int id,HttpSession session) {
+    public String deleleManager(@RequestParam("userId") int id) {
     	JSONObject jsonObject = new JSONObject();
-    	if(authorityCheck(session)) {
+    	
     		User user=userService.getUser(id);
     		if(user==null) {
     			logger.info("no such userId "+id);
@@ -117,21 +111,9 @@ public class UserController {
     		}
     		  jsonObject.put("success",tag );
     		}
-    	}else{
-    		jsonObject.put("info",StatusConstant.PERMITTION_DENY );
-    		jsonObject.put("success", false);
-    	}
+    	
     	return jsonObject.toString();
     }
     
-    private boolean authorityCheck(HttpSession session) {
-    	
-    	User user=(User) session.getAttribute("user");
-    	if(user==null||user.getType()!=1) {
-    		logger.info("attempt to do something without authority");
-    		return false;
-    	}else {
-    		return true;
-    	}
-    }
+  
 }

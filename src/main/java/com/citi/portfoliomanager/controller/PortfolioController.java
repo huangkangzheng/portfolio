@@ -8,6 +8,7 @@ import com.citi.portfoliomanager.entity.User;
 import com.citi.portfoliomanager.service.IService.ICalculateRateService;
 import com.citi.portfoliomanager.service.IService.IPortfolioService;
 import com.citi.portfoliomanager.service.IService.IProductHistoryService;
+import com.citi.portfoliomanager.service.IService.IUserService;
 import com.citi.portfoliomanager.service.PortfolioService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,6 +34,8 @@ public class PortfolioController {
     private IProductHistoryService productHistoryService;
     @Autowired
     private ICalculateRateService calculateRateService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * Manager Module
@@ -40,14 +43,14 @@ public class PortfolioController {
     @CrossOrigin
     @RequestMapping(value = "createPortfolio",method = RequestMethod.GET)
     @ResponseBody
-    public String createPortfolio(HttpSession session,@RequestParam(value = "name")String name, @RequestParam("initAsset")String initAssetString,
+    public String createPortfolio(@RequestParam("userId") int userId,@RequestParam(value = "name")String name, @RequestParam("initAsset")String initAssetString,
                                   @RequestParam("strategy")Integer strategy){
-        User user=(User) session.getAttribute("user");
+        User user=userService.getUser(userId);
         Double initAsset=Double.parseDouble(initAssetString);
         logger.info("createPortfolio>>>>> param={}"+user.getUserId()+" "+name+" "+initAsset+" "+strategy);
         JSONObject result=new JSONObject();
         if(portfolioService.createPortfolio(user,name,initAsset,strategy)){
-            session.setAttribute("user", user);
+            //session.setAttribute("user", user);
             result.put("success",true);
             JSONObject jsonObject2=new JSONObject();
             jsonObject2.put("cash",user.getCash().doubleValue());
@@ -62,11 +65,11 @@ public class PortfolioController {
     @CrossOrigin
     @RequestMapping(value = "listPortfolioByUserId",method = RequestMethod.GET)
     @ResponseBody
-    public String listPortfolioByUserId(HttpSession session){
-        User user=(User) session.getAttribute("user");
-        logger.info("listPortfolioByUserId>>>>> param={}"+user.getUserId());
+    public String listPortfolioByUserId(@RequestParam("userId") int userId){
+      //  User user=(User) session.getAttribute("user");
+        logger.info("listPortfolioByUserId>>>>> param={}"+userId);
         JSONObject result=new JSONObject();
-        List<Portfolio> portfolioList=portfolioService.listPortfolioByUserId(user.getUserId());
+        List<Portfolio> portfolioList=portfolioService.listPortfolioByUserId(userId);
         portfolioList=calculateRateService.portfolioRateOfReturn(portfolioList);
         result.put("success",true);
         result.put("data",portfolioList);
@@ -76,7 +79,7 @@ public class PortfolioController {
     @CrossOrigin
     @RequestMapping(value = "getPortfolioByPortfolioId",method = RequestMethod.GET)
     @ResponseBody
-    public String getPortfolioByPortfolioId(HttpSession session,@RequestParam("portfolioId")Integer portfolioId){
+    public String getPortfolioByPortfolioId(@RequestParam("portfolioId")Integer portfolioId){
         //User user=(User) session.getAttribute("user");
         logger.info("getPortfolioByPortfolioId>>>>> param={}"+portfolioId);
         JSONObject result=new JSONObject();
@@ -89,7 +92,7 @@ public class PortfolioController {
     @CrossOrigin
     @RequestMapping(value = "getCashAndProductPrice",method = RequestMethod.GET)
     @ResponseBody
-    public String getCashAndPriceByPortfolioId(HttpSession session,@RequestParam("portfolioId")Integer portfolioId,
+    public String getCashAndPriceByPortfolioId(@RequestParam("portfolioId")Integer portfolioId,
                                                @RequestParam("productName")String productName){
         //User user=(User) session.getAttribute("user");
         logger.info("getCashAndPriceByPortfolioId>>>>> param={}"+portfolioId+" "+productName);
@@ -114,7 +117,7 @@ public class PortfolioController {
     @CrossOrigin
     @RequestMapping(value = "queryRateByPortfolio",method = RequestMethod.GET)
     @ResponseBody
-    public String queryRateByPortfolio(HttpSession session,@RequestParam("portfolioId")Integer portfolioId,
+    public String queryRateByPortfolio(@RequestParam("portfolioId")Integer portfolioId,
                                                @RequestParam("productName")String productName){
         //User user=(User) session.getAttribute("user");
         logger.info("queryRateByPortfolio>>>>> param={}"+portfolioId+" "+productName);
@@ -128,7 +131,7 @@ public class PortfolioController {
     @CrossOrigin
     @RequestMapping(value = "getProductHistoryByProductName",method = RequestMethod.GET)
     @ResponseBody
-    public String getProductHistoryByProductName(HttpSession session, @RequestParam("productName")String productName){
+    public String getProductHistoryByProductName( @RequestParam("productName")String productName){
         //User user=(User) session.getAttribute("user");
         logger.info("getProductHistoryByProductName>>>>> param={}"+" "+productName);
         JSONObject result=new JSONObject();

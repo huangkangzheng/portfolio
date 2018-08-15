@@ -46,7 +46,7 @@ public class HelloController {
     @CrossOrigin
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     @ResponseBody
-    public String Login(@RequestParam("username")String username,@RequestParam("password")String password,HttpSession session){
+    public String Login(@RequestParam("username")String username,@RequestParam("password")String password){
         logger.info("lgoin :username="+username);
         User user=userService.login(username, password);
         int result=user.getUserId();
@@ -59,7 +59,7 @@ public class HelloController {
             jsonObject.put("success", true);
         	jsonObject.put("type", user.getType());
         	jsonObject.put("userId", user.getUserId());
-        	session.setAttribute("user", user);
+        	//session.setAttribute("user", user);
         }
         return jsonObject.toString();
     }
@@ -68,12 +68,9 @@ public class HelloController {
     @CrossOrigin
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
     @ResponseBody
-    public String logOut(HttpSession session){
-    	User user=(User) session.getAttribute("userId");
-    	if(user!=null) {
-    		logger.info("login out: "+user.getUsername());
-    	}
-        session.setAttribute("user", null);
+    public String logOut(@RequestParam("userId") String userId){
+    
+    	logger.info("login out: "+userId);
         JSONObject jsonObject = new JSONObject();
       //  jsonObject.put("success", true);
         jsonObject.put("id", null);
