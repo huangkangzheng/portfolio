@@ -67,7 +67,7 @@ public class HelloController {
     @ResponseBody
     public String logOut(HttpSession session){
     	User user=(User) session.getAttribute("userId");
-    	if(user==null) {
+    	if(user!=null) {
     		logger.info("login out: "+user.getUsername());
     	}
         session.setAttribute("user", null);
