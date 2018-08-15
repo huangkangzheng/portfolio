@@ -65,7 +65,7 @@ public class HelloController {
     @CrossOrigin
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
     @ResponseBody
-    public String LoginOut(HttpSession session){
+    public String logOut(HttpSession session){
     	User user=(User) session.getAttribute("userId");
         logger.info("login out: "+user.getUsername());
         session.setAttribute("user", null);
