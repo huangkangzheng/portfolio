@@ -67,7 +67,9 @@ public class HelloController {
     @ResponseBody
     public String logOut(HttpSession session){
     	User user=(User) session.getAttribute("userId");
-        logger.info("login out: "+user.getUsername());
+    	if(user==null) {
+    		logger.info("login out: "+user.getUsername());
+    	}
         session.setAttribute("user", null);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("success", true);
