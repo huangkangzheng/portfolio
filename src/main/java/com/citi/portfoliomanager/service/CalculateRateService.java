@@ -149,6 +149,13 @@ public class CalculateRateService implements ICalculateRateService{
 			record.setCalDate(SystemDate.getSysDate());
 			record.setPortfolioId(pos.getPortfolioId());
 			record.setTotalAsset(rateMap.get(pos.getPortfolioId()));
+			PortfolioHistoryExample phe=new PortfolioHistoryExample();
+			phe.createCriteria().andCalDateEqualTo(SystemDate.getSysDate()).andPortfolioIdEqualTo(pos.getPortfolioId());
+			
+			int tag=portfolioHistoryMapper.deleteByExample(phe);
+			if(tag>0) {
+				logger.warn("delete some portfolioHistory becasue it will be recreate");
+			}
 			portfolioHistoryMapper.insert(record);
 		}
 		return true;
