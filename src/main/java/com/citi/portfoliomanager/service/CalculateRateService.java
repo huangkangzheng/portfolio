@@ -88,8 +88,8 @@ public class CalculateRateService implements ICalculateRateService{
 	private Map<Integer,BigDecimal>calPosition(List<Position> positions,Map<String,BigDecimal> productHistory){
 		Map<Integer,BigDecimal> result=new TreeMap<Integer, BigDecimal>();
 	    for(Position pos:positions) {
-	    	BigDecimal res=result.getOrDefault(pos.getPortfolioId(),new BigDecimal(0.01));
-	    	BigDecimal price=productHistory.getOrDefault(pos.getProductName(),new BigDecimal(0.01));
+	    	BigDecimal res=result.getOrDefault(pos.getPortfolioId(),new BigDecimal("0.01"));
+	    	BigDecimal price=productHistory.getOrDefault(pos.getProductName(),new BigDecimal("0.01"));
 	    	res=res.add(price.multiply(new BigDecimal(pos.getQuantity())));
 	    	result.put(pos.getPortfolioId(), res);
 	    }
@@ -103,7 +103,7 @@ public class CalculateRateService implements ICalculateRateService{
 			if(positionTotal.get(port.getPortfolioId())!=null){
 			     bd=bd.add(positionTotal.get(port.getPortfolioId()));
 			}else {
-				bd=bd.add(new BigDecimal(0.01));
+				bd=bd.add(new BigDecimal("0"));
 			}
 			//bd=bd.divide(port.getInitialAsset());
 			res.put(port.getPortfolioId(), bd);
@@ -177,7 +177,7 @@ public class CalculateRateService implements ICalculateRateService{
 	        List<Position> positionList=positionMapper.selectByExample(positionExample);
 	        Map<String, BigDecimal>  prices=buildProductHistoryMap();
 	        for(Position p:positionList) {
-	        	p.setCurPrice(prices.getOrDefault(p.getProductName(), new BigDecimal(0.01)));
+	        	p.setCurPrice(prices.getOrDefault(p.getProductName(), new BigDecimal("0.01")));
 	        }
 	        Collections.sort(positionList,new Comparator<Position>(){
 	            @Override

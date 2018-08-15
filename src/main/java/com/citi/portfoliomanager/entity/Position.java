@@ -74,7 +74,7 @@ public class Position {
 	public void setCurPrice(BigDecimal curPrice) {
 		this.curPrice = curPrice;
 		this.totalValue = curPrice.multiply(new BigDecimal(this.quantity));
-		this.rateOfreturn = (curPrice.divide(buyPrice,8,BigDecimal.ROUND_HALF_DOWN).subtract(new BigDecimal(1)));
+		this.rateOfreturn = (curPrice.divide(buyPrice,8,BigDecimal.ROUND_DOWN).subtract(new BigDecimal(1)));
 	}
 
 	public BigDecimal getTotalValue() {

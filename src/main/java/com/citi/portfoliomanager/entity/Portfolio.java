@@ -87,7 +87,10 @@ public class Portfolio {
 
 	public void setTotalAsset(BigDecimal totalAssert) {
 		this.totalAsset = totalAssert;
-		this.rateOfReturn = totalAssert.subtract(initialAsset).divide(initialAsset,8,BigDecimal.ROUND_HALF_DOWN);
+		System.out.println(totalAssert.subtract(initialAsset));
+		
+		this.rateOfReturn = totalAssert.subtract(initialAsset).divide(initialAsset,6,BigDecimal.ROUND_DOWN);
+		System.out.println(rateOfReturn);
 	}
 
 
