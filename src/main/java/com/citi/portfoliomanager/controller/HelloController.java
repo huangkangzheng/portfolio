@@ -25,10 +25,13 @@ public class HelloController {
 
     @RequestMapping(value = "/index",method = RequestMethod.GET)
     public String index(){
-        logger.info("进入index页面");
-        return "index";
+    	JSONObject jsonObject = new JSONObject();
+        jsonObject.put("success", true);
+        return jsonObject.toString();
     }
-
+    
+    
+    
     @RequestMapping(value = "/getUser",method = RequestMethod.GET)
     @ResponseBody
     public User getUser(HttpSession session){
@@ -55,6 +58,19 @@ public class HelloController {
         	jsonObject.put("userId", user.getUserId());
         	session.setAttribute("user", user);
         }
+        return jsonObject.toString();
+    }
+    
+    
+    @CrossOrigin
+    @RequestMapping(value = "/logout",method = RequestMethod.GET)
+    @ResponseBody
+    public String LoginOut(HttpSession session){
+    	User user=(User) session.getAttribute("userId");
+        logger.info("login out: "+user.getUsername());
+        session.setAttribute("user", null);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("success", true);
         return jsonObject.toString();
     }
 }

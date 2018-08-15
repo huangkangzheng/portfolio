@@ -83,6 +83,7 @@ public class UserController {
     		
     	}
     	if(!user.getPassword().equals(old)) {
+    		logger.info("wrong password");
     		jsonObject.put("success", false);
     		jsonObject.put("status",StatusConstant.PASSWORD_INVALID );
     		return jsonObject.toString();
@@ -91,9 +92,11 @@ public class UserController {
         boolean tag=userService.updateUser(user.getUserId(),newP);
         if(!tag) {
 			jsonObject.put("status",StatusConstant.DATABASE_ERROR_OR_NO_DATA );
-		}
+		}else {
 		  jsonObject.put("success",tag );
-    	return jsonObject.toString();
+		  user.setPassword(newP);
+		}
+        return jsonObject.toString();
     }
     
     @CrossOrigin
