@@ -35,7 +35,7 @@ public class UserController {
     	if(!authorityCheck(session)) {
     		jsonObject.put("success",false);
     		logger.info("attempt to do something without authority");
-    		jsonObject.put("status",StatusConstant.PERMITTION_DENY );
+    		jsonObject.put("info",StatusConstant.PERMITTION_DENY );
     		return jsonObject.toString();
     	}
     	jsonObject.put("success",true);
@@ -59,7 +59,7 @@ public class UserController {
     	bg=new BigDecimal(initCash);
     	}catch(NumberFormatException e) {
     		jsonObject.put("success", false);
-    		jsonObject.put("status",StatusConstant.PARAMETER_PARSE_ERROR);
+    		jsonObject.put("info",StatusConstant.PARAMETER_PARSE_ERROR);
     		logger.info("NumberFormatException "+initCash);
     		 return jsonObject.toString();
     	}
@@ -85,13 +85,13 @@ public class UserController {
     	if(!user.getPassword().equals(old)) {
     		logger.info("wrong password");
     		jsonObject.put("success", false);
-    		jsonObject.put("status",StatusConstant.PASSWORD_INVALID );
+    		jsonObject.put("info",StatusConstant.PASSWORD_INVALID );
     		return jsonObject.toString();
     	}
     	logger.info("update  user password "+user.getUserId());
         boolean tag=userService.updateUser(user.getUserId(),newP);
         if(!tag) {
-			jsonObject.put("status",StatusConstant.DATABASE_ERROR_OR_NO_DATA );
+			jsonObject.put("info",StatusConstant.DATABASE_ERROR_OR_NO_DATA );
 		}else {
 		  jsonObject.put("success",tag );
 		  user.setPassword(newP);
@@ -113,12 +113,12 @@ public class UserController {
     		user.setStatus(1);
     		boolean tag=userService.updateUser(user.getUserId(),1);
     		if(!tag) {
-    			jsonObject.put("status",StatusConstant.DATABASE_ERROR_OR_NO_DATA );
+    			jsonObject.put("info",StatusConstant.DATABASE_ERROR_OR_NO_DATA );
     		}
     		  jsonObject.put("success",tag );
     		}
     	}else{
-    		jsonObject.put("status",StatusConstant.PERMITTION_DENY );
+    		jsonObject.put("info",StatusConstant.PERMITTION_DENY );
     		jsonObject.put("success", false);
     	}
     	return jsonObject.toString();
