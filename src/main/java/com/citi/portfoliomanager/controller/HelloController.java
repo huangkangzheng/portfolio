@@ -22,8 +22,10 @@ public class HelloController {
 
     @Autowired
     private IUserService userService;
-
+    
+    @CrossOrigin
     @RequestMapping(value = "/index",method = RequestMethod.GET)
+    @ResponseBody
     public String index(){
     	JSONObject jsonObject = new JSONObject();
         jsonObject.put("success", true);
@@ -31,7 +33,7 @@ public class HelloController {
     }
     
     
-    
+    @CrossOrigin
     @RequestMapping(value = "/getUser",method = RequestMethod.GET)
     @ResponseBody
     public User getUser(HttpSession session){
