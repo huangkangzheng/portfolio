@@ -125,7 +125,7 @@ public class PortfolioController {
         Map<String,Object> data=portfolioService.queryRate(portfolioId,productName);
         result.put("success",true);
         result.put("data",data);
-        return result.toString();
+        return result.toJSONStringWithDateFormat(result, "yyyy/MM/dd");
     }
 
     @CrossOrigin
@@ -138,7 +138,7 @@ public class PortfolioController {
         List<ProductHistory> productHistoryList=productHistoryService.listProductHistory(productName);
         result.put("success",true);
         result.put("data",productHistoryList);
-        return result.toString();
+        return result.toJSONStringWithDateFormat(result, "yyyy/MM/dd");
     }
 
 
