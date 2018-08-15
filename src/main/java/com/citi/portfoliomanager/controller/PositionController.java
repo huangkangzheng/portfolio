@@ -3,8 +3,10 @@ package com.citi.portfoliomanager.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.citi.portfoliomanager.constant.SystemDate;
 import com.citi.portfoliomanager.entity.Position;
+import com.citi.portfoliomanager.entity.ProductHistory;
 import com.citi.portfoliomanager.entity.User;
 import com.citi.portfoliomanager.service.IService.IPositionService;
+import com.citi.portfoliomanager.service.IService.IProductHistoryService;
 import com.citi.portfoliomanager.service.PositionService;
 import javafx.geometry.Pos;
 import org.apache.logging.log4j.LogManager;
@@ -25,6 +27,8 @@ public class PositionController {
 
     @Autowired
     private IPositionService positionService;
+    @Autowired
+    private IProductHistoryService productHistoryService;
 
     @CrossOrigin
     @RequestMapping(value = "processProduct",method = RequestMethod.GET)
@@ -54,8 +58,13 @@ public class PositionController {
             totalQuantity+=position.getQuantity();
         JSONObject data=new JSONObject();
         data.put("totalQTY",totalQuantity);
-
-        result.put("success",true);
+        ProductHistory productHistory=productHistoryService.getProductHistory(SystemDate.getSysDate(),productName);
+        if(productHistory==null)
+            result.put("success",false);
+        else{
+            result.put("success",true);
+            data.put("todayPrice",productHistory.getPrice());
+        }
         result.put("data",data);
 
         return result.toString();
