@@ -40,6 +40,8 @@ public class UserService implements IUserService {
     	}catch(Exception e) {
     		User user=new User();
     		user.setUserId(-400);
+    		e.printStackTrace();
+    		logger.error(e.getMessage());
     		return user;
     	  }
     	

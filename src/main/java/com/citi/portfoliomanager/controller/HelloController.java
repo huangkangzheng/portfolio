@@ -1,6 +1,7 @@
 package com.citi.portfoliomanager.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.citi.portfoliomanager.entity.User;
 import com.citi.portfoliomanager.service.IService.IUserService;
 
@@ -74,7 +75,10 @@ public class HelloController {
     	}
         session.setAttribute("user", null);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("success", true);
-        return jsonObject.toString();
+      //  jsonObject.put("success", true);
+        jsonObject.put("id", null);
+        jsonObject.put("uername", null);
+        jsonObject.put("type", null);
+        return JSONObject.toJSONString(jsonObject, SerializerFeature.WriteMapNullValue);
     }
 }
