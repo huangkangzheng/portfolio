@@ -109,7 +109,7 @@ public class PortfolioService implements IPortfolioService {
         ProductHistory todayProductHistory=todayProductHistoryList.get(0);
 
         List<PortfolioHistory> portfolioHistoryList=new ArrayList<PortfolioHistory>();
-        List<ProductHistory> productHistoryList=new ArrayList<ProductHistory>();
+        //List<ProductHistory> productHistoryList=new ArrayList<ProductHistory>();
         List<BigDecimal> productRatesList=new ArrayList<BigDecimal>();
         for(int i=DictEnum.DATA_LIST_NUM;i>=1;i--){
             Date begin=new Date(today.getTime()-DictEnum.EACH_DAY*i);
@@ -123,22 +123,22 @@ public class PortfolioService implements IPortfolioService {
             else
                 portfolioHistoryList.add(temp.get(0));
             ProductHistoryExample productHistoryExample=new ProductHistoryExample();
-            portfolioHistoryExample.clear();
+            productHistoryExample.clear();
             productHistoryExample.createCriteria().andGenerateDateEqualTo(begin).andNameEqualTo(productName);
             List<ProductHistory> temp2=productHistoryMapper.selectByExample(productHistoryExample);
             if(temp2.size()==0){
-                productHistoryList.add(null);
+                //productHistoryList.add(null);
                 productRatesList.add(new BigDecimal(0));
             }
             else{
-                productHistoryList.add(temp2.get(0));
+                //productHistoryList.add(temp2.get(0));
                 BigDecimal productRate=todayProductHistory.getPrice().divide(temp2.get(0).getPrice(),10,BigDecimal.ROUND_CEILING);
                 productRate=productRate.subtract(new BigDecimal(1));
                 productRatesList.add(productRate);
             }
         }
         result.put("portfolioList",portfolioHistoryList);
-        result.put("productList",productHistoryList);
+        //result.put("productList",productHistoryList);
         result.put("productRateList",productRatesList);
 
 

@@ -125,6 +125,19 @@ public class PortfolioController {
         return result.toString();
     }
 
+    @CrossOrigin
+    @RequestMapping(value = "getProductHistoryByProductName",method = RequestMethod.GET)
+    @ResponseBody
+    public String getProductHistoryByProductName(HttpSession session, @RequestParam("productName")String productName){
+        //User user=(User) session.getAttribute("user");
+        logger.info("getProductHistoryByProductName>>>>> param={}"+" "+productName);
+        JSONObject result=new JSONObject();
+        List<ProductHistory> productHistoryList=productHistoryService.listProductHistory(productName);
+        result.put("success",true);
+        result.put("data",productHistoryList);
+        return result.toString();
+    }
+
 
     /**
      * Admin` Module
