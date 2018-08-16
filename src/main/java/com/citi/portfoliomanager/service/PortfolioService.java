@@ -157,9 +157,9 @@ public class PortfolioService implements IPortfolioService {
             }
             else{
                 portfolioHistoryList.add(temp.get(0));
-                BigDecimal productRate=temp.get(0).getTotalAsset().divide(beginPortfolioHistory.getTotalAsset(),10,BigDecimal.ROUND_CEILING);
-                productRate=productRate.subtract(new BigDecimal(1));
-                productRatesList.add(productRate);
+                BigDecimal portfolioRate=temp.get(0).getTotalAsset().divide(beginPortfolioHistory.getTotalAsset(),5,BigDecimal.ROUND_CEILING);
+                portfolioRate=portfolioRate.subtract(new BigDecimal(1));
+                portfolioRatesList.add(portfolioRate);
             }
             ProductHistoryExample productHistoryExample=new ProductHistoryExample();
             productHistoryExample.clear();
@@ -171,7 +171,7 @@ public class PortfolioService implements IPortfolioService {
             }
             else{
                 //productHistoryList.add(temp2.get(0));
-                BigDecimal productRate=temp2.get(0).getPrice().divide(beginProductHistory.getPrice(),10,BigDecimal.ROUND_CEILING);
+                BigDecimal productRate=temp2.get(0).getPrice().divide(beginProductHistory.getPrice(),5,BigDecimal.ROUND_CEILING);
                 productRate=productRate.subtract(new BigDecimal(1));
                 productRatesList.add(productRate);
             }
