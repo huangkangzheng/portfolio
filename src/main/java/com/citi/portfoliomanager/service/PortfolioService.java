@@ -110,21 +110,38 @@ public class PortfolioService implements IPortfolioService {
     public Map<String, Object> queryRate(Integer portfolioId, String productName) {
         Map<String,Object> result=new HashMap<String,Object>();
         Date today= SystemDate.getSysDate();
-        ProductHistoryExample todayExample=new ProductHistoryExample();
-        todayExample.createCriteria().andGenerateDateEqualTo(today).andNameEqualTo(productName);
-        List<ProductHistory> todayProductHistoryList=productHistoryMapper.selectByExample(todayExample);
-        if(todayProductHistoryList.size()==0)
-            result.put("isValid",false);
-        else
-            result.put("isValid",true);
-        ProductHistory todayProductHistory=todayProductHistoryList.get(0);
 
         List<PortfolioHistory> portfolioHistoryList=new ArrayList<PortfolioHistory>();
         //List<ProductHistory> productHistoryList=new ArrayList<ProductHistory>();
         List<BigDecimal> productRatesList=new ArrayList<BigDecimal>();
+        List<BigDecimal> portfolioRatesList=new ArrayList<BigDecimal>();
         List<String> dateList=new ArrayList<String>();
 
-        for(int i=DictEnum.DATA_LIST_NUM;i>=1;i--){
+        Date beginDate=new Date(today.getTime()-DictEnum.EACH_DAY);
+
+        ProductHistoryExample todayExample=new ProductHistoryExample();
+        todayExample.createCriteria().andGenerateDateEqualTo(beginDate).andNameEqualTo(productName);
+        List<ProductHistory> beginProductHistoryList=productHistoryMapper.selectByExample(todayExample);
+        if(beginProductHistoryList.size()==0){
+            result.put("isValid",false);
+            return result;
+        }
+        else
+            result.put("isValid",true);
+        ProductHistory beginProductHistory=beginProductHistoryList.get(0);
+
+        PortfolioHistoryExample portfolioHistoryExample1=new PortfolioHistoryExample();
+        portfolioHistoryExample1.createCriteria().andCalDateEqualTo(beginDate).andPortfolioIdEqualTo(portfolioId);
+        List<PortfolioHistory> beginPortfolioHistoryList=portfolioHistoryMapper.selectByExample(portfolioHistoryExample1);
+
+        if(beginPortfolioHistoryList.size()==0){
+            result.put("isValid",false);
+            return result;
+        }
+        else
+            result.put("isValid",true);
+        PortfolioHistory beginPortfolioHistory=beginPortfolioHistoryList.get(0);
+        for(int i=1;i<=DictEnum.DATA_LIST_NUM;i++){
             Date begin=new Date(today.getTime()-DictEnum.EACH_DAY*i);
             DateFormat bf = new SimpleDateFormat("yyyy/MM/dd");
             String date=bf.format(begin);
@@ -135,9 +152,14 @@ public class PortfolioService implements IPortfolioService {
             List<PortfolioHistory> temp=portfolioHistoryMapper.selectByExample(portfolioHistoryExample);
             if(temp.size()==0){
                 portfolioHistoryList.add(null);
+                portfolioRatesList.add(new BigDecimal(0));
             }
-            else
+            else{
                 portfolioHistoryList.add(temp.get(0));
+                BigDecimal productRate=temp.get(0).getTotalAsset().divide(beginPortfolioHistory.getTotalAsset(),10,BigDecimal.ROUND_CEILING);
+                productRate=productRate.subtract(new BigDecimal(1));
+                productRatesList.add(productRate);
+            }
             ProductHistoryExample productHistoryExample=new ProductHistoryExample();
             productHistoryExample.clear();
             productHistoryExample.createCriteria().andGenerateDateEqualTo(begin).andNameEqualTo(productName);
@@ -148,13 +170,14 @@ public class PortfolioService implements IPortfolioService {
             }
             else{
                 //productHistoryList.add(temp2.get(0));
-                BigDecimal productRate=todayProductHistory.getPrice().divide(temp2.get(0).getPrice(),10,BigDecimal.ROUND_CEILING);
+                BigDecimal productRate=temp2.get(0).getPrice().divide(beginProductHistory.getPrice(),10,BigDecimal.ROUND_CEILING);
                 productRate=productRate.subtract(new BigDecimal(1));
                 productRatesList.add(productRate);
             }
         }
-        result.put("portfolioList",portfolioHistoryList);
+        //result.put("portfolioList",portfolioHistoryList);
         //result.put("productList",productHistoryList);
+        result.put("portfolioRateList",portfolioRatesList);
         result.put("productRateList",productRatesList);
         result.put("dateList",dateList);
 
