@@ -93,13 +93,13 @@ public class PositionService implements IPositionService{
             BigDecimal rate=productHistory.getPrice().divide(position.getBuyPrice(),15,BigDecimal.ROUND_HALF_DOWN);
             rate=rate.subtract(new BigDecimal(1));
             if(currentQuantity>=position.getQuantity()){
-                insertTrade(position.getProductDate(),position.getBuyPrice(),productHistory.getGenerateDate(),productHistory.getPrice(),position.getQuantity(),rate,position.getProductName());
+                insertTrade(portfolioId,position.getProductDate(),position.getBuyPrice(),productHistory.getGenerateDate(),productHistory.getPrice(),position.getQuantity(),rate,position.getProductName());
                 deletePosition(position.getPositionId());
                 currentQuantity-=position.getQuantity();
             }
             //otherwise,write down corresponding position quantity
             else{
-                insertTrade(position.getProductDate(),position.getBuyPrice(),productHistory.getGenerateDate(),productHistory.getPrice(),currentQuantity,rate,position.getProductName());
+                insertTrade(portfolioId,position.getProductDate(),position.getBuyPrice(),productHistory.getGenerateDate(),productHistory.getPrice(),currentQuantity,rate,position.getProductName());
                 Integer restQuantity=position.getQuantity()-currentQuantity;
                 updatePositionQuantity(position.getPositionId(),restQuantity);
             }
@@ -171,8 +171,9 @@ public class PositionService implements IPositionService{
     }
 
     @Override
-    public boolean insertTrade(Date buyDate, BigDecimal buyPrice, Date sellDate, BigDecimal sellPrice, Integer quantity, BigDecimal rateOfReturn, String productName) {
+    public boolean insertTrade(Integer portfolioId,Date buyDate, BigDecimal buyPrice, Date sellDate, BigDecimal sellPrice, Integer quantity, BigDecimal rateOfReturn, String productName) {
         Trade trade=new Trade();
+        trade.setPortfolioid(portfolioId);
         trade.setBuyDate(buyDate);
         trade.setBuyPrice(buyPrice);
         trade.setSellDate(sellDate);
@@ -185,5 +186,13 @@ public class PositionService implements IPositionService{
         return false;
     }
 
-	
+    @Override
+    public List<Trade> listTradeByPortfolioId(Integer portfolioId) {
+        TradeExample tradeExample=new TradeExample();
+        tradeExample.createCriteria().andPortfolioidEqualTo(portfolioId);
+        List<Trade> tradeList=tradeMapper.selectByExample(tradeExample);
+        return tradeList;
+    }
+
+
 }

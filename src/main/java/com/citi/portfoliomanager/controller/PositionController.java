@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.citi.portfoliomanager.constant.SystemDate;
 import com.citi.portfoliomanager.entity.Position;
 import com.citi.portfoliomanager.entity.ProductHistory;
+import com.citi.portfoliomanager.entity.Trade;
 import com.citi.portfoliomanager.entity.User;
 import com.citi.portfoliomanager.service.IService.IPositionService;
 import com.citi.portfoliomanager.service.IService.IProductHistoryService;
@@ -67,6 +68,18 @@ public class PositionController {
         }
         result.put("data",data);
 
+        return result.toString();
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "listTradeByPortfolioId",method = RequestMethod.GET)
+    @ResponseBody
+    public String listTradeByPortfolioId( @RequestParam(value = "portfolioId")Integer portfolioId){
+        logger.info("listTradeByPortfolioId>>>>>>param{}:"+portfolioId);
+        JSONObject result=new JSONObject();
+        List<Trade> tradeList=positionService.listTradeByPortfolioId(portfolioId);
+        result.put("success",true);
+        result.put("data",tradeList);
         return result.toString();
     }
 }
