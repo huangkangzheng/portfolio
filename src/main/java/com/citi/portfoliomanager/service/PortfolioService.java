@@ -96,6 +96,15 @@ public class PortfolioService implements IPortfolioService {
 	}
 
     @Override
+    public boolean updataPortfolio(Integer portfolioId, String name) {
+        Portfolio portfolio=portfolioMapper.selectByPrimaryKey(portfolioId);
+        portfolio.setName(name);
+        if(portfolioMapper.updateByPrimaryKey(portfolio)==1)
+            return true;
+        return false;
+    }
+
+    @Override
     public Map<String, Object> queryRate(Integer portfolioId, String productName) {
         Map<String,Object> result=new HashMap<String,Object>();
         Date today= SystemDate.getSysDate();

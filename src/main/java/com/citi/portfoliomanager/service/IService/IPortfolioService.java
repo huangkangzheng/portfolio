@@ -21,6 +21,8 @@ public interface IPortfolioService {
     //update portfolio's owner(by userId)
     boolean changeUserId(Integer portfolioId, Integer userId);
 
+    boolean updataPortfolio(Integer portfolioId,String name);
+
     //get portfolio By portfolioId
     Portfolio getPortfolioById(Integer portfolioId);
 

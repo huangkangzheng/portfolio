@@ -63,6 +63,21 @@ public class PortfolioController {
     }
 
     @CrossOrigin
+    @RequestMapping(value = "updatePortfolio",method = RequestMethod.GET)
+    @ResponseBody
+    public String updataPortfolio(@RequestParam("portfolioId")Integer portfolioId,@RequestParam(value = "name")String name){
+        logger.info("updatePortfolio>>>>> param={}"+portfolioId+" "+name);
+
+        JSONObject result=new JSONObject();
+
+        if(portfolioService.updataPortfolio(portfolioId,name)){
+            result.put("success",true);
+        }
+        else result.put("success",false);
+        return result.toString();
+    }
+
+    @CrossOrigin
     @RequestMapping(value = "listPortfolioByUserId",method = RequestMethod.GET)
     @ResponseBody
     public String listPortfolioByUserId(@RequestParam("userId") int userId){
