@@ -51,6 +51,6 @@ public class ListPortfolioController {
 	        List<Position> res=calculateService.listPositionByPortfolio(portfolioId);
 	        result.put("success", true);
 	        result.put("data", res);
-	        return result.toJSONStringWithDateFormat(res, "yyyy/MM/dd");
+	        return result.toJSONStringWithDateFormat(result, "yyyy/MM/dd");
 	    }
 }
