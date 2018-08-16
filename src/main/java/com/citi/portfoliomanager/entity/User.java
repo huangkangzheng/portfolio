@@ -1,6 +1,7 @@
 package com.citi.portfoliomanager.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class User {
     /**
@@ -67,7 +68,20 @@ public class User {
      *
      * @mbggenerated Mon Aug 13 12:02:45 CST 2018
      */
-    public Integer getUserId() {
+    
+    
+    private List<Portfolio> portfolios;
+    
+    
+    public List<Portfolio> getPortfolios() {
+		return portfolios;
+	}
+
+	public void setPortfolios(List<Portfolio> portfolios) {
+		this.portfolios = portfolios;
+	}
+
+	public Integer getUserId() {
         return userId;
     }
 

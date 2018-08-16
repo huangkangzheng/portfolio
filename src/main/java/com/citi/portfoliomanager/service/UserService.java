@@ -2,6 +2,7 @@ package com.citi.portfoliomanager.service;
 
 
 import com.citi.portfoliomanager.dao.UserMapper;
+import com.citi.portfoliomanager.entity.Portfolio;
 import com.citi.portfoliomanager.entity.User;
 import com.citi.portfoliomanager.entity.UserExample;
 import com.citi.portfoliomanager.service.IService.IUserService;
@@ -10,7 +11,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by hkz on 2017/4/23.
@@ -70,7 +75,11 @@ public class UserService implements IUserService {
 	public List<User> getUsers(int type){
 		UserExample example=new UserExample();
 		example.createCriteria().andTypeEqualTo(type).andStatusEqualTo(0);
-		return userMapper.selectByExample(example);
+		List<User>res= userMapper.selectByExample(example);
+		for(User u:res) {
+			u.setPortfolios(new ArrayList<Portfolio>());
+		}
+		return res;
 	}
 
 	@Override
