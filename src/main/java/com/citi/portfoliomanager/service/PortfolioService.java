@@ -7,6 +7,7 @@ import com.citi.portfoliomanager.dao.PortfolioMapper;
 import com.citi.portfoliomanager.dao.ProductHistoryMapper;
 import com.citi.portfoliomanager.dao.UserMapper;
 import com.citi.portfoliomanager.entity.*;
+import com.citi.portfoliomanager.entity.PortfolioExample.Criteria;
 import com.citi.portfoliomanager.service.IService.IPortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -189,5 +190,13 @@ public class PortfolioService implements IPortfolioService {
         });*/
         return result;
     }
+
+	@Override
+	public List<Portfolio> searchPortfolio(Integer userId, String productName) {
+		// TODO Auto-generated method stub
+		PortfolioExample pe=new PortfolioExample();
+	    pe.createCriteria().andNameLike("%"+productName+"%").andUserIdEqualTo(userId);
+		return portfolioMapper.selectByExample(pe);
+	}
 
 }
