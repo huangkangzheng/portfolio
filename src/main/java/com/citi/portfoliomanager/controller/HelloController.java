@@ -59,6 +59,7 @@ public class HelloController {
             jsonObject.put("success", true);
         	jsonObject.put("type", user.getType());
         	jsonObject.put("userId", user.getUserId());
+        	jsonObject.put("cash",user.getCash());
         	//session.setAttribute("user", user);
         }
         return jsonObject.toString();
