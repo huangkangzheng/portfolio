@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -120,8 +122,13 @@ public class PortfolioService implements IPortfolioService {
         List<PortfolioHistory> portfolioHistoryList=new ArrayList<PortfolioHistory>();
         //List<ProductHistory> productHistoryList=new ArrayList<ProductHistory>();
         List<BigDecimal> productRatesList=new ArrayList<BigDecimal>();
+        List<String> dateList=new ArrayList<String>();
+
         for(int i=DictEnum.DATA_LIST_NUM;i>=1;i--){
             Date begin=new Date(today.getTime()-DictEnum.EACH_DAY*i);
+            DateFormat bf = new SimpleDateFormat("yyyy/MM/dd");
+            String date=bf.format(begin);
+            dateList.add(date);
             PortfolioHistoryExample portfolioHistoryExample=new PortfolioHistoryExample();
             portfolioHistoryExample.clear();
             portfolioHistoryExample.createCriteria().andCalDateEqualTo(begin).andPortfolioIdEqualTo(portfolioId);
@@ -149,7 +156,7 @@ public class PortfolioService implements IPortfolioService {
         result.put("portfolioList",portfolioHistoryList);
         //result.put("productList",productHistoryList);
         result.put("productRateList",productRatesList);
-
+        result.put("dateList",dateList);
 
         /*Collections.sort(portfolioHistoryList, new Comparator<PortfolioHistory>() {
             @Override
