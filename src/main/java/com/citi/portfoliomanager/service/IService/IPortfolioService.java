@@ -27,4 +27,8 @@ public interface IPortfolioService {
     Portfolio getPortfolioById(Integer portfolioId);
 
     Map<String,Object> queryRate(Integer portfolioId, String productName);
+    
+    List<Portfolio>searchPortfolio(Integer userId,String productName);
+    
+  
 }

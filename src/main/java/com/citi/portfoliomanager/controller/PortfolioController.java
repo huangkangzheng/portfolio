@@ -172,4 +172,20 @@ public class PortfolioController {
           return result.toString();
     }
     
+    @CrossOrigin
+    @RequestMapping(value = "/searchPortfolio",method = RequestMethod.GET)
+    @ResponseBody
+    public String searchPortfolio(@RequestParam(value = "portfolioName")String portfolioName,@RequestParam(value = "userId")int userId
+    		,HttpSession session) {
+    	  logger.info("searchPortfolio");
+          JSONObject result=new JSONObject();
+          if(portfolioName!=null&&!portfolioName.equals("null")&&!portfolioName.equals("")) {
+               result.put("data", portfolioService.searchPortfolio(userId, portfolioName));
+          }else {
+        	  result.put("data", portfolioService.listPortfolioByUserId(userId));
+          }
+          result.put("success", true);
+          return result.toString();
+    }
+    
 }
