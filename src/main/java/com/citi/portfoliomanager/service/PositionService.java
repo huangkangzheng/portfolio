@@ -194,5 +194,21 @@ public class PositionService implements IPositionService{
         return tradeList;
     }
 
+    @Override
+    public List<Position> searchPosition(String productName, Date begin, Date end) {
+        PositionExample positionExample=new PositionExample();
+        positionExample.createCriteria().andProductNameEqualTo(productName).andProductDateBetween(begin,end);
+        List<Position> result=positionMapper.selectByExample(positionExample);
+        return result;
+    }
+
+    @Override
+    public List<Trade> searchTrade(String productName, Date begin, Date end) {
+        TradeExample tradeExample=new TradeExample();
+        tradeExample.createCriteria().andProductNameEqualTo(productName).andBuyDateBetween(begin,end);
+        List<Trade> result=tradeMapper.selectByExample(tradeExample);
+        return result;
+    }
+
 
 }

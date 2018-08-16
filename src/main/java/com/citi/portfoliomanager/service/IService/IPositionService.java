@@ -39,4 +39,10 @@ public interface IPositionService {
     boolean insertTrade(Integer portfolioId,Date buyDate, BigDecimal buyPrice,Date sellDate, BigDecimal sellPrice,Integer quantity,BigDecimal ratesOfReturn,String productName);
 
     List<Trade> listTradeByPortfolioId(Integer portfolioId);
+
+    List<Position> searchPosition(String productName,Date begin,Date end);
+
+    List<Trade> searchTrade(String productName,Date begin,Date end);
+
+
 }

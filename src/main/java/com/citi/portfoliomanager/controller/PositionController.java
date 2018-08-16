@@ -1,6 +1,7 @@
 package com.citi.portfoliomanager.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.citi.portfoliomanager.constant.DictEnum;
 import com.citi.portfoliomanager.constant.SystemDate;
 import com.citi.portfoliomanager.entity.Position;
 import com.citi.portfoliomanager.entity.ProductHistory;
@@ -17,6 +18,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -81,5 +86,31 @@ public class PositionController {
         result.put("success",true);
         result.put("data",tradeList);
         return JSONObject.toJSONStringWithDateFormat(result, "yyyy/MM/dd");
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "searchPositionOrTrade",method = RequestMethod.GET)
+    @ResponseBody
+    public String searchPositionOrTrade(Integer type,String productName,String begin,String end){
+        logger.info("searchPositionOrTrade>>>>>>param{}:"+type+" "+productName+" "+begin+" "+end);
+        JSONObject result=new JSONObject();
+        DateFormat df=new SimpleDateFormat("yyyy/MM/dd");
+        try {
+            result.put("success",true);
+            Date beginDate=df.parse(begin);
+            Date endDate=df.parse(end);
+            if(type.equals(DictEnum.SEARCHPOSITION)){
+                List<Position> data=positionService.searchPosition(productName,beginDate,endDate);
+                result.put("data",data);
+            }
+            else{
+                List<Trade> data=positionService.searchTrade(productName,beginDate,endDate);
+                result.put("data",data);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            result.put("success",false);
+        }
+        return result.toString();
     }
 }
