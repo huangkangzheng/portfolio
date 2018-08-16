@@ -80,6 +80,6 @@ public class PositionController {
         List<Trade> tradeList=positionService.listTradeByPortfolioId(portfolioId);
         result.put("success",true);
         result.put("data",tradeList);
-        return result.toString();
+        return JSONObject.toJSONStringWithDateFormat(result, "yyyy/MM/dd");
     }
 }
